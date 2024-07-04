@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Se connecter
+{% block title %}Connexion
 {% endblock %}
 
-{% block body %}
+{% block content %}
 	<form method="post">
 		{% if error %}
 			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -11,33 +11,37 @@
 
 		{% if app.user %}
 			<div class="mb-3">
-				You are logged in as
-				{{ app.user.userIdentifier }},
-				<a href="{{ path('security_logout') }}">Logout</a>
+				Vous êtes connecté(e) en tant que
+				{{ app.user.username }},
+				<a href="{{ path('app_logout') }}">Logout</a>
 			</div>
 		{% endif %}
 
-		<h1>Connexion</h1>
-		<div class="form-group mb-3">
-			<label for="inputEmail">Votre email :</label>
-			<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus placeholder="e.g. picard@starfleet.org">
-		</div>
-		<div class="form-group mb-3">
-			<label for="inputPassword">Votre mot de passe :</label>
-			<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required placeholder="••••••••">
-		</div>
+		<h2 class="h3 mb-3 font-weight-normal">Renseignez vos identifiants</h2>
+		<label for="inputEmail">Email</label>
+		<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+		<label class=" mt-4" for="inputPassword">Mot de passe</label>
+		<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
-		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+		<input
+		type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-		<div class="checkbox mb-3 mt-3">
-			<label>
-				<input type="checkbox" name="_remember_me">
-				Se souvenir de moi
-			</label>
-		</div>
+		{#
+						        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+						        See https://symfony.com/doc/current/security/remember_me.html
+						
+						        <div class="checkbox mb-3">
+						            <label>
+						                <input type="checkbox" name="_remember_me"> Remember me
+						            </label>
+						        </div>
+						    #}
 
-		<button class="btn btn-success mt-3" type="submit">
-			Se connecter
+		<button class="btn btn-lg btn-outline-success mt-4" type="submit">
+			Connexion
 		</button>
 	</form>
+	<p class="mt-3">Vous n'êtes pas inscrit ?
+		<a href="">Créez un compte ici</a>
+	</p>
 {% endblock %}
