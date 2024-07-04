@@ -171,3 +171,16 @@ form:invalid button.btn-dark[type="submit"],
 .text-muted a {
   color: #53595c !important;
 }
+
+.footer-custom {
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(9, 36, 70);
+  box-shadow: 5px 5px 7px 0.1rem black;
+}
+
+.navbar {
+  box-shadow: 5px 5px 7px 0.1rem black;
+}
