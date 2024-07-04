@@ -2,15 +2,18 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Trait\SlugTrait;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
 {
+    use SlugTrait;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -34,7 +37,7 @@ class Product
         /**
      * @var Collection<int, Images>
      */
-    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'images')]
+    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'images', orphanRemoval: true, cascade: ['persist'])]
     private Collection $images;
 
 
@@ -50,13 +53,6 @@ class Product
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getName(): ?string

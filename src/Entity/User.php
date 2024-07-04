@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
-    #[ORM\Column(length: 13)]
+    #[ORM\Column(length: 20)]
     private ?string $phone = null;
 
     public function getId(): ?int
