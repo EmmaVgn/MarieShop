@@ -22,8 +22,7 @@ class RegistrationController extends AbstractController
         Request $request, 
         UserPasswordHasherInterface $userPasswordHasher,
         Security $security, 
-        UserAuthenticatorInterface $userAuthenticator, 
-        LoginAuthenticator $authenticator,
+
         EntityManagerInterface $entityManager
         ): Response
 

@@ -6,13 +6,13 @@
 	<div class="collapse navbar-collapse" id="navbarCollapse">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item active">
-				<a class="nav-link" href="{{ path('home') }}">Produits</a>
+				<a class="nav-link" href="{{ path('homepage') }}">Produits</a>
 			</li>
 			<li class="nav-item active">
-				<a class="nav-link" href="{{ path('home') }}">Qui sommes-nous ?</a>
+				<a class="nav-link" href="{{ path('homepage') }}">Qui sommes-nous ?</a>
 			</li>
 			<li class="nav-item active">
-				<a class="nav-link" href="{{ path('home') }}">Contact</a>
+				<a class="nav-link" href="{{ path('homepage') }}">Contact</a>
 			</li>
 			<ul class="navbar-nav">
 				{% if app.user %}
@@ -23,7 +23,7 @@
 					</li>
 				</li>
 				<li class="nav-item active">
-					<a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+					<a class="nav-link" href="{{ path('security_logout') }}">Déconnexion</a>
 				</li>
 			{% else %}
 				<li class="nav-item active">
@@ -31,7 +31,7 @@
 				</li>
 
 				<li class="nav-item active">
-					<a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+					<a class="nav-link" href="{{ path('security_login') }}">Connexion</a>
 				</li>
 			{% endif %}
 		</ul>
