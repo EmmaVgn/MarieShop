@@ -13,10 +13,13 @@ class HomeController extends AbstractController
     public function index(ProductRepository $productRepository): Response
     {
         $products = $productRepository->findBy([], [], 3);
+        
 
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
-            'products' => $products
+            'carousel' => true,  //Le caroussel ne s'affiche que sur la page d'accueil (voir base.twig)
+            'top_products' => $products,
+          
         ]);
     }
 }
