@@ -1,0 +1,26 @@
+<div
+	class="card mb-3 me-2">
+	{# Vérifie si le produit a des images et affiche la première image si elle existe #}
+	{% if p.images|length > 0 and p.images.first %}
+		<img src="{{ vich_uploader_asset(p.images.first, 'imageFile')|imagine_filter('miniature') }}" alt="Product Image" class="img-fluid">
+	{% else %}
+		<img src="path/to/default-image.jpg" alt="Default Product Image" class="img-fluid">
+	{% endif %}
+	<div class="card-body">
+		<h4 class="card-title">{{ p.name | uppercase }}
+			<span class="text-primary fw-bold">
+				({{ p.price | amount }})
+			</span>
+		</h4>
+		<span class="d-flex flex-row align-items-center align-self-center flex-wrap">
+			<span class="badge bg-info me-1">{{ p.category.name }}</span>
+		</span>
+		<hr>
+		<p class="card-text">
+			{{ p.Description|raw|nl2br|striptags|u.truncate(150, '...') }}
+		</p>
+		<hr>
+		<a href="{{ path('product_show', {'category_slug': p.category.slug, 'slug': p.slug}) }}" class="btn btn-primary btn-sm">En savoir plus</a>
+		<a href="{{ path('cart_add', {'id': p.id}) }}" class="btn btn-success btn-sm">Ajouter</a>
+	</div>
+</div>
