@@ -18,7 +18,7 @@
 		<header>
 			{% include "shared/_navbar.html.twig" %}
 		</header>
-		<main role="main">
+		<main class="mb-5" role="main">
 			{% if carousel is defined %}
 				{% include "shared/_carousel.html.twig" %}
 			{% else %}
@@ -26,12 +26,13 @@
 			{% endif %}
 			<div class="container marketing {{margin ?? 0}}"> {% block body %}{% endblock %}
 				</div>
-				<!-- /.container -->
-				<!-- FOOTER -->
-				<footer class="container">
-					{% include "shared/_footer.html.twig" %}
-				</footer>
+
+
 			</main>
+			<!-- FOOTER -->
+			<footer class="container">
+				{% include "shared/_footer.html.twig" %}
+			</footer>
 			<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 			<script src="{{asset('assets/js/bootstrap.bundle.js')}}"></script>
 		</body>

@@ -174,10 +174,11 @@ form:invalid button.btn-dark[type="submit"],
 
 .footer-custom {
   text-align: center;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   width: 100%;
   background-color: rgb(222, 234, 248);
+  margin-top: 10em;
   box-shadow: 5px 5px 7px 0.1rem black;
 }
 
@@ -198,4 +199,23 @@ form:invalid button.btn-dark[type="submit"],
   .bd-placeholder-img-lg {
     font-size: 3.5rem;
   }
+}
+
+.product-item {
+  margin-bottom: 1.5em;
+}
+
+.product-item h5 {
+  text-transform: uppercase;
+  font-size: 0.9em;
+  margin-bottom: 0.1em;
+}
+
+.product-subtitle {
+  display: block;
+  margin-bottom: 0.2em;
+}
+
+.product-price {
+  font-weight: bold;
 }
