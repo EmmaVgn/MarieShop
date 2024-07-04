@@ -26,7 +26,8 @@
         "symfony/validator": "7.0.*",
         "symfony/yaml": "7.0.*",
         "twig/intl-extra": "^3.10",
-        "twig/string-extra": "^3.10"
+        "twig/string-extra": "^3.10",
+        "vich/uploader-bundle": "^2.4"
     },
     "require-dev": {
         "symfony/debug-bundle": "7.0.*",
