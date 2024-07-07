@@ -219,3 +219,144 @@ form:invalid button.btn-dark[type="submit"],
 .product-price {
   font-weight: bold;
 }
+
+/*--------------------------------------------------------------
+# Card
+--------------------------------------------------------------*/
+.embed-responsive .card-img-top {
+  object-fit: cover;
+}
+/*--------------------------------------------------------------
+# Filters
+--------------------------------------------------------------*/
+.box {
+  padding: 10px;
+}
+
+#collapseSections,
+#collapseNavigation {
+  height: 300px;
+  margin-right: 0.3rem !important;
+  overflow-y: scroll;
+}
+
+#collapseSections::-webkit-scrollbar,
+#collapseNavigation::-webkit-scrollbar {
+  width: 6px;
+}
+
+#collapseSections::-webkit-scrollbar-thumb,
+#collapseNavigation::-webkit-scrollbar-thumb {
+  background-color: #333;
+  border-radius: 2px;
+}
+
+#collapseSections::-webkit-scrollbar-track,
+#collapseNavigation::-webkit-scrollbar-track {
+  background-color: #ddd;
+  border-radius: 2px;
+}
+
+.box-label {
+  color: #1d2939;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.box-label .btn {
+  background-color: #fff;
+  padding: 0;
+}
+
+.box-label .btn:focus {
+  box-shadow: none;
+}
+
+.box-label .btn:active,
+.box-label .btn:hover {
+  color: #212529;
+  background-color: #fff;
+  border-color: transparent;
+}
+
+.filter {
+  display: block;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 20px;
+}
+
+/*--------------------------------------------------------------
+# Spinner
+--------------------------------------------------------------*/
+.is-loading::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  opacity: 0.5;
+  z-index: 4;
+}
+
+.is-loading .spinner-border {
+  position: absolute;
+  top: calc(50% - 1rem);
+  left: calc(50% - 1rem);
+  z-index: 5;
+}
+
+.star-rating i {
+  cursor: pointer;
+}
+
+.star-rating > i.far.fa-star {
+  font-size: 24px;
+  color: #ccc;
+  transition: color 0.3s ease-in-out;
+}
+
+.star-rating > i.fa-star.fas {
+  font-size: 24px;
+  color: #f8d32b;
+}
+
+/*--------------------------------------------------------------
+# Error 404
+--------------------------------------------------------------*/
+.error-404 {
+  padding: 30px;
+}
+
+.error-404 h1 {
+  font-size: 180px;
+  font-weight: 700;
+  color: #4154f1;
+  margin-bottom: 0;
+  line-height: 150px;
+}
+
+.error-404 h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #012970;
+  margin-bottom: 30px;
+}
+
+.error-404 .btn {
+  background: #51678f;
+  color: #fff;
+  padding: 8px 30px;
+}
+
+.error-404 .btn:hover {
+  background: #3e4f6f;
+}
+
+@media (min-width: 992px) {
+  .error-404 img {
+    max-width: 50%;
+  }
+}

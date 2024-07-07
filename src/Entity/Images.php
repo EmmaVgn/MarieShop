@@ -64,11 +64,6 @@ class Images
         return $this->imageName;
     }
 
-    public function __toString(): string
-    {
-        return $this->imageName;
-    }
-
     public function setImageName(string $imageName): static
     {
         $this->imageName = $imageName;
@@ -88,12 +83,12 @@ class Images
         return $this;
     }
 
-    public function getImages(): ?Product
+    public function getProduct(): ?Product
     {
         return $this->product;
     }
 
-    public function setImages(?Product $product): static
+    public function setProduct(?Product $product): static
     {
         $this->product = $product;
 

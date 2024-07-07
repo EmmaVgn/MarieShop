@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use App\Entity\Trait\SlugTrait;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Trait\CreatedAtTrait;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,7 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Product
 {
     use SlugTrait;
-    
+    use CreatedAtTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -34,20 +36,46 @@ class Product
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Category $category = null;
 
-        /**
-     * @var Collection<int, Images>
-     */
-    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'images', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'product', orphanRemoval: true, cascade: ['persist'])]
     private Collection $images;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTime $MDD = null;
 
-    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column]
+    private ?int $capacity = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $boticalName = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $partOfPlant = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $extractionMethod = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $culture = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $introduction = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $advise = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $precautions = null;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->images = new ArrayCollection();
+        $this->MDD = new \DateTime();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -63,7 +91,6 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -75,7 +102,6 @@ class Product
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -87,7 +113,6 @@ class Product
     public function setPrice(int $price): static
     {
         $this->price = $price;
-
         return $this;
     }
 
@@ -99,7 +124,6 @@ class Product
     public function setStock(int $stock): static
     {
         $this->stock = $stock;
-
         return $this;
     }
 
@@ -111,7 +135,6 @@ class Product
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
-
         return $this;
     }
 
@@ -123,13 +146,9 @@ class Product
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
-        /**
-     * @return Collection<int, Images>
-     */
     public function getImages(): Collection
     {
         return $this->images;
@@ -139,20 +158,123 @@ class Product
     {
         if (!$this->images->contains($image)) {
             $this->images->add($image);
-            $image->setImages($this);
+            $image->setProduct($this);
         }
-
         return $this;
     }
 
     public function removeImage(Images $image): static
     {
         if ($this->images->removeElement($image)) {
-            // set the owning side to null (unless already changed)
-            if ($image->getImages() === $this) {
-                $image->setImages(null);
+            if ($image->getProduct() === $this) {
+                $image->setProduct(null);
             }
         }
+        return $this;
+    }
+
+    public function getMDD(): ?\DateTime
+    {
+        return $this->MDD;
+    }
+
+    public function setMDD(\DateTime $MDD): static
+    {
+        $this->MDD = $MDD;
+        return $this;
+    }
+
+    public function getCapacity(): ?int
+    {
+        return $this->capacity;
+    }
+
+    public function setCapacity(int $capacity): static
+    {
+        $this->capacity = $capacity;
+        return $this;
+    }
+
+    public function getBoticalName(): ?string
+    {
+        return $this->boticalName;
+    }
+
+    public function setBoticalName(string $boticalName): static
+    {
+        $this->boticalName = $boticalName;
+
+        return $this;
+    }
+
+    public function getPartOfPlant(): ?string
+    {
+        return $this->partOfPlant;
+    }
+
+    public function setPartOfPlant(string $partOfPlant): static
+    {
+        $this->partOfPlant = $partOfPlant;
+
+        return $this;
+    }
+
+    public function getExtractionMethod(): ?string
+    {
+        return $this->extractionMethod;
+    }
+
+    public function setExtractionMethod(string $extractionMethod): static
+    {
+        $this->extractionMethod = $extractionMethod;
+
+        return $this;
+    }
+
+    public function getCulture(): ?string
+    {
+        return $this->culture;
+    }
+
+    public function setCulture(string $culture): static
+    {
+        $this->culture = $culture;
+
+        return $this;
+    }
+
+    public function getIntroduction(): ?string
+    {
+        return $this->introduction;
+    }
+
+    public function setIntroduction(string $introduction): static
+    {
+        $this->introduction = $introduction;
+
+        return $this;
+    }
+
+    public function getAdvise(): ?string
+    {
+        return $this->advise;
+    }
+
+    public function setAdvise(string $advise): static
+    {
+        $this->advise = $advise;
+
+        return $this;
+    }
+
+    public function getPrecautions(): ?string
+    {
+        return $this->precautions;
+    }
+
+    public function setPrecautions(string $precautions): static
+    {
+        $this->precautions = $precautions;
 
         return $this;
     }
