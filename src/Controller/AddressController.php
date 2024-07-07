@@ -2,12 +2,13 @@
 namespace App\Controller;
 use App\Entity\Address;
 use App\Form\AddressType;
+use App\Form\AddressFormType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AddressController extends AbstractController
 {
@@ -23,7 +24,7 @@ class AddressController extends AbstractController
     public function add(Request $request, EntityManagerInterface $em, SessionInterface $session): Response
     {
         $address = new Address();
-        $form = $this->createForm(AddressType::class, $address);
+        $form = $this->createForm(AddressFormType::class, $address);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $address->setUser($this->getUser());
@@ -47,7 +48,7 @@ class AddressController extends AbstractController
         if (!$address || $address->getUser() != $this->getUser()) {
             return $this->redirectToRoute('account_address');
         }
-        $form = $this->createForm(AddressType::class, $address);
+        $form = $this->createForm(AddressFormType::class, $address);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $address->setUser($this->getUser());

@@ -398,3 +398,35 @@ form:invalid button.btn-dark[type="submit"],
     max-width: 50%;
   }
 }
+
+/*--------------------------------------------------------------
+# order
+--------------------------------------------------------------*/
+
+.col-form-label {
+  font-weight: bold;
+  /* margin-bottom: 0.3em; */
+}
+
+.summary-label {
+  display: block;
+  padding: 7px 0;
+}
+
+#order .form-check {
+  background-color: rgba(225, 232, 235, 0.295);
+  padding: 1.5em 3em;
+  margin-bottom: 0.5em;
+  border-radius: 0.3em;
+}
+
+#order .form-check:hover {
+  box-shadow: 0px 0px 10px 0.1rem rgba(0, 0, 0, 0.3);
+}
+
+.cart-summary {
+  padding: 1em;
+  background-color: rgba(225, 232, 235, 0.295);
+
+  box-shadow: 0px 0px 5px 0.1rem rgba(0, 0, 0, 0.1);
+}

@@ -35,6 +35,9 @@ class Order
     #[ORM\OneToMany(mappedBy: 'bindedOrder', targetEntity: OrderDetails::class)]
     private $orderDetails;
 
+    #[ORM\Column(type: 'boolean')]
+    private $isPaid;
+
     #[ORM\Column(type: 'string', length: 255)]
     private $reference;
 
@@ -162,6 +165,18 @@ class Order
         }
         return $total;
   
+    }
+
+    public function getIsPaid(): ?bool
+    {
+        return $this->isPaid;
+    }
+
+    public function setIsPaid(bool $isPaid): self
+    {
+        $this->isPaid = $isPaid;
+
+        return $this;
     }
 
     public function getReference(): ?string

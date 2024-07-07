@@ -58,5 +58,6 @@
 		<p>Votre panier est vide</p>
 	{% endif %}
 	<hr>
-
-{% endblock %}
+	<a class="mb-3 d-block" href="{{ path('product_display') }}">Continuez mes achats</a>
+	<a href="{{ path('order')}}" title="Valider puis passer au paiement" class="btn btn-outline-success btn-block"></i>
+	Valider mon panier</a>{% endblock %}
