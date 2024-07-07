@@ -1,15 +1,13 @@
 <?php
-
 namespace App\Controller;
-
 use App\Entity\Address;
-use App\Form\AddressFormType;
+use App\Form\AddressType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 class AddressController extends AbstractController
 {
@@ -25,10 +23,8 @@ class AddressController extends AbstractController
     public function add(Request $request, EntityManagerInterface $em, SessionInterface $session): Response
     {
         $address = new Address();
-        $form = $this->createForm(AddressFormType::class, $address);
-
+        $form = $this->createForm(AddressType::class, $address);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $address->setUser($this->getUser());
 
@@ -41,34 +37,27 @@ class AddressController extends AbstractController
             return $this->redirectToRoute('account_address');
         }
 
-        return $this->renderForm('account/address_form.html.twig', [
+        return $this->render('account/address_form.html.twig', [
             'form' => $form
         ]);
     }
-
     #[Route('compte/adresses/modifier/{id}', name: 'account_address_update')]
     public function update(Request $request, EntityManagerInterface $em, Address $address = null): Response
     {
         if (!$address || $address->getUser() != $this->getUser()) {
             return $this->redirectToRoute('account_address');
         }
-
         $form = $this->createForm(AddressType::class, $address);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $address->setUser($this->getUser());
-
             $em->flush();
             return $this->redirectToRoute('account_address');
         }
-
-        return $this->renderForm('account/address_form.html.twig', [
+        return $this->render('account/address_form.html.twig', [
             'form' => $form
         ]);
     }
-
     #[Route('compte/adresses/supprimer/{id}', name: 'account_address_delete')]
     public function delete(EntityManagerInterface $em, Address $address = null): Response
     {
@@ -76,7 +65,6 @@ class AddressController extends AbstractController
             $em->remove($address);
             $em->flush();
         }
-
         return $this->redirectToRoute('account_address');
     }
 }

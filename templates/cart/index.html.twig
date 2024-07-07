@@ -1,47 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon panier
+{% block title %}Votre panier
 {% endblock %}
 
 {% block body %}
-	<h3>Mon Panier</h3>
-	<p>Voici les articles que vous avez ajoutés</p>
-
-	<table class="table">
-		<thead>
-			<tr>
-				<th scope="col">Article</th>
-				<th scope="col">Prix (unité)</th>
-				<th scope="col">Quantité</th>
-				<th scope="col">Total</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for item in cart %}
+	<h1>Votre panier</h1>
+	{% if items | length > 0 %}
+		<table class="table table-striped">
+			<thead>
 				<tr>
-					<td>
-						<img height="60px" src="/uploads/{{ item.product.image }}" alt="{{ item.product.name }}">
-						{{item.product.name}}
-					</td>
-					<td>{{(item.product.price / 100)|number_format(2,',','.') }}
-						€</td>
-					<td>x
-						{{ item.quantity }}</td>
-					<td>{{ (item.quantity * (item.product.price / 100))|number_format(2,',','.') }}
-						€</td>
+					<th>Produit</th>
+					<th>Prix</th>
+					<th>Quantité</th>
+					<th>Total</th>
+					<th></th>
 				</tr>
-			{% endfor %}
-		</tbody>
-		<tfoot>
-			<th>Total</th>
-			<td></td>
-			<td>x
-				{{ totalQuantity }}</td>
-			<td>{{ (totalPrice / 100)|number_format(2,',','.') }}
-				€</td>
-		</tfoot>
-	</table>
-	<a class="btn btn-info">Valider mon panier</a>
+			</thead>
+			<tbody>
+				{% for item in items %}
+					<tr>
+						<td>{{ item.product.name }}</td>
+						<td>{{ item.product.price|amount }}</td>
+						<td>
+							<a href="{{ path('cart_decrement', {'id': item.product.id}) }}" class="btn btn-primary btn-sm">
+								<i class="fas fa-minus"></i>
+							</a>
+							{{ item.qty }}
+							<a href="{{ path('cart_add', {'id': item.product.id}) }}?returnToCart=true" class="btn btn-primary btn-sm">
+								<i class="fas fa-plus"></i>
+							</a>
+						</td>
+						<td>{{ item.total|amount }}</td>
+						<td>
+							<a href="{{ path('cart_delete', {'id': item.product.id }) }}">
+								<i class="fas fa-trash"></i>
+							</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="3">Sous-total :</td>
+					<td colspan="2">{{ total|amount }}</td>
+				</tr>
+				<tr>
+					<td colspan="3">Frais de livraison :</td>
+					<td colspan="2"></td>
+				</tr>
+				<tr>
+					<td colspan="3">Total :</td>
 
+				</tr>
+			</tfoot>
+		</table>
+	{% else %}
+		<p>Votre panier est vide</p>
+	{% endif %}
+	<hr>
 
 {% endblock %}
