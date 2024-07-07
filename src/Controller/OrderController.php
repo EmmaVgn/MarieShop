@@ -1,7 +1,8 @@
 <?php
+
 namespace App\Controller;
 
-use App\Models\Cart;
+use App\Model\Cart;
 use App\Entity\Order;
 use App\Form\OrderType;
 use App\Cart\CartService;
@@ -27,22 +28,33 @@ class OrderController extends AbstractController
     public function index(SessionInterface $session, CartService $cart): Response
     {
         $user = $this->getUser();
-        $cartProducts = $cart->getDetails();
+        $cartProducts = $cart->getDetailedCartItems();
 
+        // Redirection si panier vide
+        if (empty($cartProducts['products'])) {   
+            return $this->redirectToRoute('product_display');
+        }
+        
         //Redirection si utilisateur n'a pas encore d'adresse
-        if (!$user->getAddresses()->getValues()) {      //getValues() Récupère directement les valeurs d'une collection d'objet
+        
+        if (!$user->getAddresses() || $user->getAddresses()->isEmpty()) {      //getAddresses() should return a collection of addresses, check if it's empty
             $session->set('order', 1);
             return $this->redirectToRoute('account_address_new');
         }
+
         $form = $this->createForm(OrderFormType::class, null, [
             'user' => $user     //Permet de passer l'utilisateur courant dans le tableau d'options du OrderType
         ]); 
+
+        dd($form->createView());
+
         return $this->render('order/index.html.twig', [
             'form' => $form,
             'cart' => $cartProducts,
             'totalPrice' =>$cartProducts['totals']['price']
         ]);
     }
+
     /**
      * Enregistrement des données "en dur" de la commande contenant adresse, transporteur et produits
      * Les relations ne sont pas directement utilisées pour la persistance des données dans les entités Order et OrderDetails
@@ -56,7 +68,7 @@ class OrderController extends AbstractController
     public function summary(CartService $cart, Request $request, EntityManagerInterface $em): Response
     {
          //Récupération du panier en session
-        $cartProducts = $cart->getDetails();   
+        $cartProducts = $cart->getDetailedCartItems();   
 
         //Vérification qu'un formulaire a bien été envoyé précédemment
         $form = $this->createForm(OrderFormType::class, null, [
@@ -65,6 +77,7 @@ class OrderController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $address = $form->get('addresses')->getData();
+
             $delivery_string = $address->getFirstname() . ' ' . $address->getLastname();
             $delivery_string .= '<br>' . $address->getPhone();
             $delivery_string .= '<br>' . $address->getCompany() ?? '';
@@ -73,17 +86,19 @@ class OrderController extends AbstractController
             $delivery_string .= '<br>' . $address->getCity();
             $delivery_string .= '<br>' . $address->getCountry();
 
-            $cartProducts = $cart->getDetails();
+            $cartProducts = $cart->getDetailedCartItems();
 
             //Création de la commande avec les infos formulaire
             $order = new Order;
+            $date = new \DateTime;
             $order
                 ->setUser($this->getUser())
-                ->setCreatedAt(new \DateTime)
+                ->setCreatedAt($date)
                 ->setCarrierName($form->get('carriers')->getData()->getName())
                 ->setCarrierPrice($form->get('carriers')->getData()->getPrice())
                 ->setDelivery($delivery_string)
-                ->setIsPaid(0)
+                ->setState(0)
+                ->setReference($date->format('YmdHis') . '-' . uniqid())
             ;
             $em->persist($order);
 
@@ -100,6 +115,8 @@ class OrderController extends AbstractController
                 $em->persist($orderDetails);
             }
             $em->flush();
+
+            // Affichage récap
             return $this->render('order/add.html.twig', [
                 'cart' => $cartProducts,
                 'totalPrice' =>$cartProducts['totals']['price'],
@@ -107,6 +124,6 @@ class OrderController extends AbstractController
             ]);
         }
         //Si pas de formulaire, page non accessible, et donc redirection vers le panier
-        $this->redirectToRoute('cart');
+        return $this->redirectToRoute('cart');
     }
 }

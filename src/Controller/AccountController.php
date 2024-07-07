@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Form\ChangePasswordFormType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,9 +26,9 @@ class AccountController extends AbstractController
      * Permet la modification du mot de passe d'un utilisateur sur une page dédiée
      */
     #[Route('/compte/mot-de-passe', name: 'account_password')]
-    public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
+    public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em, UserRepository $user): Response
     {
-        $user = $this->getUser();
+        $user->getUser();
         $form = $this->createForm(ChangePasswordFormType::class, $user);
         $form->handleRequest($request);
 
