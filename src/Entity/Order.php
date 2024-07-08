@@ -36,7 +36,7 @@ class Order
     private $orderDetails;
 
     #[ORM\Column(type: 'boolean')]
-    private $isPaid;
+    private $isPaid = false;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $reference;

@@ -2,18 +2,18 @@
 
 namespace App\Controller;
 
-use App\Model\Cart;
 use App\Entity\Order;
-use App\Form\OrderType;
 use App\Cart\CartService;
 use App\Form\OrderFormType;
 use App\Entity\OrderDetails;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class OrderController extends AbstractController
 {
@@ -21,23 +21,27 @@ class OrderController extends AbstractController
      * Récupération du panier, choix de l'adresse et du transporteur
      *
      * @param SessionInterface $session
-     * @param Cart $cart
+     * @param CartService $cart
      * @return Response
      */
     #[Route('/commande', name: 'order')]
-    public function index(SessionInterface $session, CartService $cart): Response
+    public function index(SessionInterface $session, CartService $cart, UserRepository $user): Response
     {
+        /** @var User */
         $user = $this->getUser();
         $cartProducts = $cart->getDetailedCartItems();
 
-        // Redirection si panier vide
-        if (empty($cartProducts['products'])) {   
+        // // Redirection si panier vide
+        if (empty($cartProducts)) {
             return $this->redirectToRoute('product_display');
         }
-        
+
+
         //Redirection si utilisateur n'a pas encore d'adresse
-        
-        if (!$user->getAddresses() || $user->getAddresses()->isEmpty()) {      //getAddresses() should return a collection of addresses, check if it's empty
+
+        if (!$user->getAddresses() || $user->getAddresses()->isEmpty()) {
+            // Cette ligne peut être problématique si getAddresses() renvoie une collection
+            // La collection ne peut pas être convertie en chaîne directement
             $session->set('order', 1);
             return $this->redirectToRoute('account_address_new');
         }
@@ -46,84 +50,78 @@ class OrderController extends AbstractController
             'user' => $user     //Permet de passer l'utilisateur courant dans le tableau d'options du OrderType
         ]); 
 
-        dd($form->createView());
-
         return $this->render('order/index.html.twig', [
-            'form' => $form,
+            'form' => $form->createView(),
             'cart' => $cartProducts,
-            'totalPrice' =>$cartProducts['totals']['price']
+            'totalPrice' => $cart->getTotal()
         ]);
     }
 
     /**
-     * Enregistrement des données "en dur" de la commande contenant adresse, transporteur et produits
-     * Les relations ne sont pas directement utilisées pour la persistance des données dans les entités Order et OrderDetails
-     * pour éviter des incohérences dans le cas ou des modifications seraient faites sur les autres entités par la suite
+     * Enregistrement des données de la commande
      *
-     * @param Cart $cart
+     * @param CartService $cart
      * @param Request $request
+     * @param EntityManagerInterface $em
      * @return Response
      */
     #[Route('/commande/recap', name: 'order_add', methods: 'POST')]
     public function summary(CartService $cart, Request $request, EntityManagerInterface $em): Response
     {
-         //Récupération du panier en session
-        $cartProducts = $cart->getDetailedCartItems();   
+        $cartProducts = $cart->getDetailedCartItems();
 
-        //Vérification qu'un formulaire a bien été envoyé précédemment
         $form = $this->createForm(OrderFormType::class, null, [
-            'user' => $this->getUser()     
-        ]); 
+            'user' => $this->getUser()
+        ]);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $address = $form->get('addresses')->getData();
+            $carrier = $form->get('carriers')->getData();
 
-            $delivery_string = $address->getFirstname() . ' ' . $address->getLastname();
-            $delivery_string .= '<br>' . $address->getPhone();
-            $delivery_string .= '<br>' . $address->getCompany() ?? '';
-            $delivery_string .= '<br>' . $address->getAddress();
-            $delivery_string .= '<br>' . $address->getPostal();
-            $delivery_string .= '<br>' . $address->getCity();
-            $delivery_string .= '<br>' . $address->getCountry();
+            $deliveryString = sprintf(
+                '%s %s<br>%s<br>%s%s<br>%s<br>%s<br>%s',
+                $address->getFirstname(),
+                $address->getLastname(),
+                $address->getPhone(),
+                $address->getCompany() ? $address->getCompany() . '<br>' : '',
+                $address->getAddress(),
+                $address->getPostal(),
+                $address->getCity(),
+                $address->getCountry()
+            );
 
-            $cartProducts = $cart->getDetailedCartItems();
-
-            //Création de la commande avec les infos formulaire
-            $order = new Order;
-            $date = new \DateTime;
-            $order
-                ->setUser($this->getUser())
-                ->setCreatedAt($date)
-                ->setCarrierName($form->get('carriers')->getData()->getName())
-                ->setCarrierPrice($form->get('carriers')->getData()->getPrice())
-                ->setDelivery($delivery_string)
+            $order = new Order();
+            $order->setUser($this->getUser())
+                ->setCreatedAt(new \DateTime())
+                ->setCarrierName($carrier->getName())
+                ->setCarrierPrice($carrier->getPrice())
+                ->setDelivery($deliveryString)
                 ->setState(0)
-                ->setReference($date->format('YmdHis') . '-' . uniqid())
-            ;
+                ->setReference((new \DateTime())->format('YmdHis') . '-' . uniqid());
+
             $em->persist($order);
 
-            //Création des lignes de détails pour chacun des produits de la commande
-            foreach ($cartProducts['products'] as $item) {
+            foreach ($cartProducts as $item) {
                 $orderDetails = new OrderDetails();
-                $orderDetails
-                    ->setBindedOrder($order)
-                    ->setProduct($item['product']->getName())
-                    ->setQuantity($item['quantity'])
-                    ->setPrice($item['product']->getPrice())
-                    ->setTotal($item['product']->getPrice() * $item['quantity'])
-                ;
+                $orderDetails->setBindedOrder($order)
+                    ->setProduct($item->getProduct()->getName())
+                    ->setQuantity($item->getQuantity())
+                    ->setPrice($item->getProduct()->getPrice())
+                    ->setTotal($item->getTotal());
+
                 $em->persist($orderDetails);
             }
+
             $em->flush();
 
-            // Affichage récap
             return $this->render('order/add.html.twig', [
                 'cart' => $cartProducts,
-                'totalPrice' =>$cartProducts['totals']['price'],
+                'totalPrice' => $cart->getTotal(),
                 'order' => $order
             ]);
         }
-        //Si pas de formulaire, page non accessible, et donc redirection vers le panier
+
         return $this->redirectToRoute('cart');
     }
 }

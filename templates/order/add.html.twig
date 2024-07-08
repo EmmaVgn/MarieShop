@@ -16,9 +16,8 @@
 		<div class="col-md-7">
 			<strong class="summary-label">Vos articles</strong>
 			<div class="cart-summary">
-				{% for item in cart.products %}
+				{% for item in cart %}
 					<div class="row">
-						<div class="col-2 my-auto"><img height="50px" src="/uploads/{{ item.product.image }}" alt="{{ item.product.name }}"></div>
 						<div class="col-8 my-auto">{{ item.product.name }}</div>
 						<div class="col-2 my-auto">x{{ item.quantity }}</div>
 					</div>

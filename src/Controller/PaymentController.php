@@ -56,7 +56,8 @@ class PaymentController extends AbstractController
         Stripe::setApiKey('sk_test_51PYmV7Ek3IUhoeZsQjEW2etfg1ttQ2lAviitRad21SaSYgs3OXvRoNVeSzXAg9Vh7cbaEpnCE54xu7JRPI4UKfFP00TQMb2avc');
         header('Content-Type: application/json');
 
-        $YOUR_DOMAIN = 'https://ecommerce.tristan-bonnal.fr';
+        $YOUR_DOMAIN = 'http://localhost:8000';
+
         
         // Création de la session Stripe avec les données du panier
         $checkout_session = Session::create([
@@ -72,38 +73,39 @@ class PaymentController extends AbstractController
 
 
 
-    /**
-     * Méthode appelée lorsque le paiement est validé
-     */
-    #[Route('/commande/valide/{stripeSession}', name: 'payment_success')]
-    public function paymentSuccess(OrderRepository $repository, $stripeSession, EntityManagerInterface $em, CartService $cart, UserRepository $user,) 
-    {
-        $order = $repository->findOneByStripeSession($stripeSession);
-        if (!$order || $order->getUser() != $this->getUser()) {
-            throw $this->createNotFoundException('Commande innaccessible');
-        }
-        if (!$order->getState()) {
-            $order->setState(1);
-            $em->flush();
-        }
+/**
+ * Méthode appelée lorsque le paiement est validé
+ */
+#[Route('/commande/valide/{stripeSession}', name: 'payment_success')]
+public function paymentSuccess(OrderRepository $repository, $stripeSession, EntityManagerInterface $em, CartService $cart, UserRepository $user): Response 
+{
+    $order = $repository->findOneByStripeSession($stripeSession);
 
-        // Envoi mail de Confirmation
-        $user->getUser();
-
-        $content = "Bonjour {$user->getFirstname()} nous vous remercions de votre commande";
-        (new Mail)->send(
-            $user->getEmail(), 
-            $user->getFirstname(), 
-            "Confirmation de la commande {$order->getReference()}", 
-            $content
-        );
-
-        // Suppression du panier une fois la commande validée
-        
-        return $this->render('payment/success.html.twig', [
-            'order' => $order
-        ]);
+    if (!$order || $order->getUser() != $this->getUser()) {
+        throw $this->createNotFoundException('Commande inaccessible');
     }
+    if (!$order->getState()) {
+        $order->setState(1);
+        $em->flush();
+    }
+
+    // Envoi mail de Confirmation
+    $userEntity = $order->getUser(); // Get the user entity associated with the order
+
+    $content = "Bonjour {$userEntity->getFirstname()} nous vous remercions de votre commande";
+    (new Mail)->send(
+        $userEntity->getEmail(), 
+        $userEntity->getFirstname(), 
+        "Confirmation de la commande {$order->getReference()}", 
+        $content
+    );
+
+    // Suppression du panier une fois la commande validée
+    
+    return $this->render('payment/success.html.twig', [
+        'order' => $order
+    ]);
+}
 
     /**
      * Commande annullée (clic sur retour dans la fenêtre)

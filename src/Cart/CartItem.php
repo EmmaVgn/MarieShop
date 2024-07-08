@@ -4,19 +4,29 @@ namespace App\Cart;
 
 use App\Entity\Product;
 
-class CartItem 
+class CartItem
 {
-    public $product;
-    public $qty;
+    private $product;
+    private $quantity;
 
-    public function __construct(Product $product, int $qty)
+    public function __construct(Product $product, int $quantity)
     {
         $this->product = $product;
-        $this->qty = $qty;
+        $this->quantity = $quantity;
     }
 
-    public function getTotal(): int
+    public function getProduct(): Product
     {
-        return $this->product->getPrice() * $this->qty;
+        return $this->product;
+    }
+
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    public function getTotal(): float
+    {
+        return $this->product->getPrice() * $this->quantity;
     }
 }

@@ -7,12 +7,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class CartService
 {
-    // public function __construct(
-    //     private RequestStack $requestStack,
-    // ) {
-    // }
-    protected $requestStack;
-    protected $productRepository;
+    private $requestStack;
+    private $productRepository;
 
     public function __construct(RequestStack $requestStack, ProductRepository $productRepository)
     {
@@ -26,72 +22,50 @@ class CartService
         return $session->get('cart', []);
     }
 
-    protected function saveCart(array $cart)
+    protected function saveCart(array $cart): void
     {
         $session = $this->requestStack->getSession();
         $session->set('cart', $cart);
     }
 
-    public function add(int $id)
+    public function add(int $id): void
     {
-        // 1. Retrouver le panier dans la session (sous forme de tableau)
-        // 2. S'il n'existe pas encore, alors prendre un tableau vide
         $cart = $this->getCart();
-        // 3. Voir si le produit {id} existe déjà dans le tableau
-        // 4. Si c'est le cas, simplement augmenter la quantité
-        // 5. Sinon, ajouter le produit avec la quantité 1
-        // if (array_key_exists($id, $cart)) {
-        //     $cart[$id]++;
-        // } else {
-        //     $cart[$id] = 1;
-        // }
-
-        //Refactoring
-        if (!array_key_exists($id, $cart)) {
-            $cart[$id] = 0;
-        }
-
-        $cart[$id]++;
-
-        // 6. Enregistrer le tableau mis à jour dans la session
+        $cart[$id] = ($cart[$id] ?? 0) + 1;
         $this->saveCart($cart);
     }
 
-    public function decrement(int $id)
+    public function decrement(int $id): void
     {
         $cart = $this->getCart();
         if (!array_key_exists($id, $cart)) {
             return;
         }
-        // Soit le produit = 1, alors il faut le supprimer
+
         if ($cart[$id] === 1) {
             $this->remove($id);
         } else {
-            // Soit le produit est > 1, alors il faut décrémenter
             $cart[$id]--;
             $this->saveCart($cart);
         }
     }
 
-    public function remove(int $id)
+    public function remove(int $id): void
     {
         $cart = $this->getCart();
         unset($cart[$id]);
         $this->saveCart($cart);
     }
 
-    public function getTotal(): int
+    public function getTotal(): float
     {
         $total = 0;
 
         foreach ($this->getCart() as $id => $qty) {
             $product = $this->productRepository->find($id);
-
-            if (!$product) {
-                continue;
+            if ($product) {
+                $total += $product->getPrice() * $qty;
             }
-
-            $total += $product->getPrice() * $qty;
         }
 
         return $total;
@@ -103,26 +77,18 @@ class CartService
     public function getDetailedCartItems(): array
     {
         $detailedCart = [];
-        // [12 => ['product' => '...'], 'quantity' => qté]
 
         foreach ($this->getCart() as $id => $qty) {
             $product = $this->productRepository->find($id);
-
-            if (!$product) {
-                continue;
+            if ($product) {
+                $detailedCart[] = new CartItem($product, $qty);
             }
-
-            $detailedCart[] = new CartItem($product, $qty);
-            // $detailedCart[] = [
-            //     'product' => $product,
-            //     'qty' => $qty
-            // ];
         }
 
         return $detailedCart;
     }
 
-    public function empty()
+    public function empty(): void
     {
         $this->saveCart([]);
     }
