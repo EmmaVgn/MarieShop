@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Votre avis
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-center">DONNER VOTRE AVIS</h1>
+	<div class="row mt-5 d-flex align-items-center flex-column">
+		<h4 class="text-center">Votre avis est très important pour nous !</h4>
+		<div class="col-md-6">
+			{{ form_start(form) }}
+			{{ form_errors(form) }}
+			{{ form_row(form.fullname) }}
+			{{ form_row(form.content) }}
+			<div class="star-rating mb-3">
+				<span>Notre sur 5 :</span>
+				{% for i in 1..5 %}
+					<i class="far fa-star" data-rating="{{ i }}"></i>
+				{% endfor %}
+			</div>
+			{{ form_row(form.rating) }}
+
+			<button type="submit" class="btn btn-secondary">Envoyez</button>
+			{{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}

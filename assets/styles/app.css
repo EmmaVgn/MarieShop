@@ -1,3 +1,20 @@
 body {
-    background-color: lightgray;
+  background-color: lightgray;
+}
+
+/*--------------------------------------------------------------
+  # Testimonials
+  --------------------------------------------------------------*/
+.testimonial {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px 20px 40px;
+}
+
+@media screen and (max-width: 768px) {
+  .testimonial {
+    width: 80%;
+    margin: 20px auto 40px;
+    padding: 20px 20px 40px;
+  }
 }
