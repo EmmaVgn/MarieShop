@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nous contacter
+{% endblock %}
+
+{% block body %}
+	<div class="home">
+		<div class="contact">
+			<div class="container text-center">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<h1>Nous contacter</h1>
+							{{ form_start(form) }}
+							{{ form_errors(form) }}
+							<div class="row">
+								<div class="col-md-6 mb-3">
+									{{ form_row(form.firstname, {'attr': {'class': 'form-control mb-3'}}) }}
+									{{ form_row(form.lastname, {'attr': {'class': 'form-control mb-3'}}) }}
+								</div>
+								<div class="col-md-6 mb-3">
+									{{ form_row(form.phone, {'attr': {'class': 'form-control mb-3'}}) }}
+									{{ form_row(form.email, {'attr': {'class': 'form-control mb-3'}}) }}
+								</div>
+								<div class="col-md-6 mb-3">
+									{{ form_row(form.content, {'attr': {'class': 'form-control'}}) }}
+								</div>
+							</div>
+							<button class="btn btn-secondary mt-3 mb-10" type="submit">
+								<span>Nous contacter</span>
+							</button>
+							{{ form_end(form) }}
+						</div>
+						<div class="col">
+							<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2849.3580623548964!2d0.6770177267131021!3d44.4258168962696!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12ab075e83ec36a1%3A0x2cb57832e6b3ad7b!2sMarie%20Farjaud!5e0!3m2!1sfr!2sfr!4v1717163567420!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}
