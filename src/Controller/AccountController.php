@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Order;
 use App\Repository\UserRepository;
 use App\Repository\OrderRepository;
@@ -28,31 +29,44 @@ class AccountController extends AbstractController
      * Permet la modification du mot de passe d'un utilisateur sur une page dédiée
      */
     #[Route('/compte/mot-de-passe', name: 'account_password')]
-    public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em, UserRepository $user): Response
-    {
-         /** @var User */
-        $user->getUser();
-        $form = $this->createForm(ChangePasswordFormType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $oldPassword = $form->get('old_password')->getData();
-            $newPassword = $form->get('new_password')->getData();
-            if ($passwordHasher->isPasswordValid($user->getUser(), $oldPassword)) {
-                $hashedPassword = $passwordHasher->hashPassword($user->getUser(), $newPassword);
-                $user->setPassword($hashedPassword);
-                $em->flush();
-                $this->addFlash('success', 'Mot de passe modifié :)');
-                return $this->redirectToRoute('account');
-            } else {
-                $this->addFlash('error', 'Mot de passe actuel erroné :(');
-            }
-        }
-
-        return $this->render('account/password.html.twig', [
-            'form' => $form->createView(),
-        ]);
+    public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
+{
+    // Get the currently authenticated user
+    $user = $this->getUser();
+    
+    if (!$user instanceof User) {
+        throw $this->createAccessDeniedException('User not found');
     }
+    
+    $form = $this->createForm(ChangePasswordFormType::class, $user);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $old_password = $form->get('old_password')->getData();
+        $new_password = $form->get('new_password')->getData();
+        $isOldPasswordValid = $passwordHasher->isPasswordValid($user, $old_password);
+        if ($isOldPasswordValid) {
+            $password = $passwordHasher->hashPassword($user, $new_password);
+            $user->setPassword($password);
+            $em->flush();
+            $this->addFlash(
+                'notice', 
+                'Mot de passe modifié :)'
+            );
+            return $this->redirectToRoute('account');
+        } else {
+            $this->addFlash(
+                'notice', 
+                'Mot de passe actuel erroné :('
+            );
+        }
+    }
+
+    return $this->render('account/password.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
 
         /**
      * Affiche la vue de toutes les commandes d'un utilisateur
@@ -69,7 +83,7 @@ class AccountController extends AbstractController
     /**
      * Affiche une commande
      */
-    #[Route('/compte/commandes/{reference}', name: 'account_order')]
+    #[Route('/compte/commandes/{reference}', name: 'account_orders')]
     public function showOrder(Order $order): Response
     {
         if (!$order || $order->getUser() != $this->getUser()) {

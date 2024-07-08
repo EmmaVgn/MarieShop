@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\Order;
 use App\Entity\Images;
 use App\Entity\Carrier;
+use App\Entity\Headers;
 use App\Entity\Product;
 use App\Entity\Category;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,9 +41,10 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Produits', 'fa-brands fa-forumbee', Product::class);
         yield MenuItem::linkToCrud('Catégories', 'fas fa-list', Category::class);
-        yield MenuItem::linkToCrud('Images', 'fas fa-image', Images::class);
         yield MenuItem::linkToCrud('Transporteurs', 'fas fa-truck', Carrier::class);
         yield MenuItem::linkToCrud('Commandes', 'fas fa-shopping-cart', Order::class);
+        yield MenuItem::linkToCrud('Bannières', 'fas fa-desktop', Headers::class);
+        yield MenuItem::linkToCrud('Images', 'fas fa-image', Images::class);
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class);
         yield MenuItem::linkToRoute('Retour au site', 'fas fa-home', 'homepage');
     }
