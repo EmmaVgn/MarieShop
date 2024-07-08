@@ -44,6 +44,7 @@ security:
     # - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/compte, roles: ROLE_USER }
     - { path: ^/commande, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
 
 when@test:
   security:
