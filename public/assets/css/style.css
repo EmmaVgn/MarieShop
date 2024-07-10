@@ -430,3 +430,56 @@ form:invalid button.btn-dark[type="submit"],
 
   box-shadow: 0px 0px 5px 0.1rem rgba(0, 0, 0, 0.1);
 }
+
+/*--------------------------------------------------------------
+  # Testimonials
+  --------------------------------------------------------------*/
+.testimonial {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px 20px 40px;
+}
+
+@media screen and (max-width: 768px) {
+  .testimonial {
+    width: 80%;
+    margin: 20px auto 40px;
+    padding: 20px 20px 40px;
+  }
+}
+
+/* Réduire la hauteur globale de la section */
+#testimonial {
+  padding-top: 20px; /* Réduire la marge en haut */
+  padding-bottom: 20px; /* Réduire la marge en bas */
+}
+
+/* Ajuster les marges et paddings internes */
+#testimonial .header-titles {
+  margin-bottom: 10px; /* Réduire la marge en bas du titre */
+}
+
+#testimonial .header-description {
+  margin-bottom: 15px; /* Réduire la marge en bas de la description */
+}
+
+#testimonial .alert-heading {
+  margin-bottom: 10px; /* Réduire la marge en bas du sous-titre */
+}
+
+#testimonial .carousel-item blockquote {
+  margin-bottom: 10px; /* Réduire la marge en bas du blockquote */
+}
+
+#testimonial .add-review {
+  margin-top: 15px; /* Réduire la marge en haut du bouton d'avis */
+}
+
+/* Ajuster les marges des éléments internes de la carousel */
+#testimonial .carousel-item .row {
+  margin-bottom: 5px; /* Réduire la marge entre les éléments de la row */
+}
+
+#testimonial .carousel-item .stars {
+  margin-bottom: 5px; /* Réduire la marge en bas des étoiles */
+}
