@@ -28,8 +28,13 @@ class CartController extends AbstractController
         if (!$product) {
             throw $this->createNotFoundException("Le produit $id n'existe pas");
         }
+        $quantity = $request->query->getInt('quantity', 1); // Utilisation de 1 comme valeur par défaut
 
-        $this->cartService->add($id);
+        if ($quantity < 1) {
+            throw $this->createNotFoundException("Quantité invalide.");
+        }
+    
+        $this->cartService->add($id, $quantity);
 
         $this->addFlash('success', "Le produit a bien été ajouté au panier");
 

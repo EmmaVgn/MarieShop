@@ -28,24 +28,32 @@ class CartService
         $session->set('cart', $cart);
     }
 
-    public function add(int $id): void
+    public function add(int $id, int $quantity = 1): void
     {
+        if ($quantity < 1) {
+            throw new \InvalidArgumentException('La quantité doit être d\'au moins 1.');
+        }
+
         $cart = $this->getCart();
-        $cart[$id] = ($cart[$id] ?? 0) + 1;
+        $cart[$id] = ($cart[$id] ?? 0) + $quantity;
         $this->saveCart($cart);
     }
 
-    public function decrement(int $id): void
+    public function decrement(int $id, int $quantity = 1): void
     {
+        if ($quantity < 1) {
+            throw new \InvalidArgumentException('La quantité de décrémentation doit être d\'au moins 1.');
+        }
+
         $cart = $this->getCart();
         if (!array_key_exists($id, $cart)) {
             return;
         }
 
-        if ($cart[$id] === 1) {
+        if ($cart[$id] <= $quantity) {
             $this->remove($id);
         } else {
-            $cart[$id]--;
+            $cart[$id] -= $quantity;
             $this->saveCart($cart);
         }
     }
