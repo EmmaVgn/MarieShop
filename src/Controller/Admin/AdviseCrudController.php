@@ -44,13 +44,12 @@ class AdviseCrudController extends AbstractCrudController
             TextField::new('name', 'Titre'),
             TextareaField::new('subtitle', 'Sous-titre'),
             TextareaField::new('content', 'Contenu'),
-            TextField::new('imageName', 'Image')
-            ->setFormType(VichImageType::class)
-            ->setTranslationParameters(['form.label.delete' => 'Supprimer'])
-            ->hideOnIndex(),
-            ImageField::new('imageName', 'Image')
-            ->setBasePath('/images/blog')
-            ->onlyOnIndex(),
+            ImageField::new('imageName')
+            ->setBasePath('images/blog/')
+            ->setUploadDir('public/images/blog')
+
+
+
         ];
     }
     

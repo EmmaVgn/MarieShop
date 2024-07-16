@@ -26,7 +26,7 @@ class Order
     #[ORM\Column(type: 'string', length: 255)]
     private $carrierName;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'integer', length: 255)]
     private $carrierPrice;
 
     #[ORM\Column(type: 'text')]

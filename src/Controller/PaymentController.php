@@ -121,6 +121,7 @@ class PaymentController extends AbstractController
 
             return $this->render('payment/fail.html.twig', [
                 'order' => $order
+                
             ]);
         }
 }

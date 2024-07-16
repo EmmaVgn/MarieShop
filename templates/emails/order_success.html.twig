@@ -1,6 +1,6 @@
 <h1>Bravo pour votre commande n°{{ order.id }}</h1>
 
-<p>Merci à vous
+<p>Merci à vous,
 	{{ user.firstname }}
 	{{ user.lastname }}
 	!</p>
@@ -21,15 +21,20 @@
 				<td>{{ item.quantity }}</td>
 				<td>{{ item.price / 100 }}
 					€</td>
-				<td>{{ item.total / 100 }}
+				<td>{{ (item.price * item.quantity) / 100 }}
 					€</td>
 			</tr>
 		{% endfor %}
 	</tbody>
 	<tfoot>
 		<tr>
-			<td colspan="3">Total :</td>
-			<td>{{ order.total / 100 }}
+			<td colspan="3" style="text-align:right;">Frais de port :</td>
+			<td>{{ order.carrierPrice / 100 }}
+				€</td>
+		</tr>
+		<tr>
+			<td colspan="3" style="text-align:right;">Total :</td>
+			<td>{{ (order.getTotal() + order.carrierPrice) / 100 }}
 				€</td>
 		</tr>
 	</tfoot>

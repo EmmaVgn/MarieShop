@@ -3,7 +3,6 @@
 {% block title %}Les conseils de Marie
 {% endblock %}
 
-
 {% block body %}
 	<main>
 		<h1>Les conseils de Marie</h1>
@@ -19,21 +18,13 @@
 									<div class="blog-grid">
 										<div class="blog-img">
 											<div class="date">
-												<span>
-													{{ advise.createdAt|format_datetime('medium', 'none', locale='fr') }}
-												</span>
-
-												<img src="{{ vich_uploader_asset(advise, 'imageFile') }}" alt="{{ advise.name}}" class="img-fluid">
-
+												<span>{{ advise.createdAt|format_datetime('medium', 'none', locale='fr') }}</span>
+												<img src="{{ vich_uploader_asset(advise, 'imageFile') }}" alt="{{ advise.name }}" class="img-fluid" width="400" height="200">
 											</div>
-
 										</div>
 										<div class="blog-info">
-											<h5>
-												{{ advise.name }}
-
-											</h5>
-											{{ advise.subtitle}}
+											<h5>{{ advise.name }}</h5>
+											{{ advise.subtitle }}
 											<div class="btn-bar">
 												<a href="{{ path('advise_show', {'slug': advise.slug}) }}" class="px-btn-arrow">
 													<span>Lire plus</span>
@@ -109,19 +100,16 @@
 										<h5>
 											<a href="#">Utilisations de l'huile essentielle d'Hélichyse Italienne</a>
 										</h5>
-										<p>Extrait de "Le guide LEDUC des huiles essentielles pour toute la famille" de Anne Dufour éditions Leducp>
-											<div class="btn-bar">
-												<a href="#" class="px-btn-arrow">
-													<span>Read More</span>
-													<i class="arrow"></i>
-												</a>
-											</div>
-										</p>
+										<p>Extrait de "Le guide LEDUC des huiles essentielles pour toute la famille" de Anne Dufour éditions Leduc</p>
+										<div class="btn-bar">
+											<a href="#" class="px-btn-arrow">
+												<span>Read More</span>
+												<i class="arrow"></i>
+											</a>
+										</div>
 									</div>
 								</div>
 							</div>
-
-
 						</div>
 					</div>
 				</div>
