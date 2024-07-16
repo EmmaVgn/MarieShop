@@ -30,10 +30,10 @@
 							€</td>
 						<td>{{order.createdAt|date('d/m/Y')}}</td>
 						<td>
-							<span class="badge badge-secondary">{{order.reference}}</span>
+							<span class="badge badge-secondary">{{order.id}}</span>
 						</td>
 						<td>
-							<a href="{{ path('account_order', {'reference' : order.reference}) }}">Consulter commande</a>
+							<a href="{{ path('account_order', {'reference' : order.id}) }}">Consulter commande</a>
 						</td>
 					</tr>
 				{% endfor %}

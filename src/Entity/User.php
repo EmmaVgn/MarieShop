@@ -77,6 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     {
         $this->addresses = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

@@ -1,0 +1,39 @@
+<h1>Bravo pour votre commande n°{{ order.id }}</h1>
+
+<p>Merci à vous
+	{{ user.firstname }}
+	{{ user.lastname }}
+	!</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Produit</th>
+			<th>Quantité</th>
+			<th>Prix unitaire</th>
+			<th>Total</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for item in order.orderDetails %}
+			<tr>
+				<td>{{ item.product }}</td>
+				<td>{{ item.quantity }}</td>
+				<td>{{ item.price / 100 }}
+					€</td>
+				<td>{{ item.total / 100 }}
+					€</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="3">Total :</td>
+			<td>{{ order.total / 100 }}
+				€</td>
+		</tr>
+	</tfoot>
+</table>
+
+<h4>La commande sera livrée à :</h4>
+<p>{{ order.delivery|raw }}</p>

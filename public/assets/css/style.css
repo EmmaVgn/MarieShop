@@ -448,38 +448,26 @@ form:invalid button.btn-dark[type="submit"],
   }
 }
 
-/* Réduire la hauteur globale de la section */
-#testimonial {
-  padding-top: 20px; /* Réduire la marge en haut */
-  padding-bottom: 20px; /* Réduire la marge en bas */
+/*--------------------------------------------------------------
+  # email
+  --------------------------------------------------------------*/
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-/* Ajuster les marges et paddings internes */
-#testimonial .header-titles {
-  margin-bottom: 10px; /* Réduire la marge en bas du titre */
+table,
+th,
+td {
+  border: 1px solid #ddd;
 }
 
-#testimonial .header-description {
-  margin-bottom: 15px; /* Réduire la marge en bas de la description */
+th,
+td {
+  padding: 8px;
+  text-align: left;
 }
 
-#testimonial .alert-heading {
-  margin-bottom: 10px; /* Réduire la marge en bas du sous-titre */
-}
-
-#testimonial .carousel-item blockquote {
-  margin-bottom: 10px; /* Réduire la marge en bas du blockquote */
-}
-
-#testimonial .add-review {
-  margin-top: 15px; /* Réduire la marge en haut du bouton d'avis */
-}
-
-/* Ajuster les marges des éléments internes de la carousel */
-#testimonial .carousel-item .row {
-  margin-bottom: 5px; /* Réduire la marge entre les éléments de la row */
-}
-
-#testimonial .carousel-item .stars {
-  margin-bottom: 5px; /* Réduire la marge en bas des étoiles */
+thead {
+  background-color: #f4f4f4;
 }

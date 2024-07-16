@@ -2,20 +2,32 @@
 
 namespace App\Controller;
 
-use App\Cart\CartService;
-
-use App\Repository\OrderRepository;
-use App\Service\Mail;
-use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Stripe\Checkout\Session;
 use Stripe\Stripe;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use App\Service\Mail;
+use App\Cart\CartService;
+use Stripe\Checkout\Session;
+use App\Event\OrderSuccessEvent;
+use App\Repository\UserRepository;
+use App\Repository\OrderRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PaymentController extends AbstractController
 {
+
+    protected $em;
+    protected $cartService;
+
+    public function __construct(EntityManagerInterface $em, CartService $cartService)
+    {
+        $this->em = $em;
+        $this->cartService = $cartService;
+    }
+
     /**
      * Etape de vérification avant confirmation du paiement
      */
@@ -53,7 +65,7 @@ class PaymentController extends AbstractController
             'quantity' => 1
         ];
         Stripe::setApiKey('sk_test_51PYmV7Ek3IUhoeZsQjEW2etfg1ttQ2lAviitRad21SaSYgs3OXvRoNVeSzXAg9Vh7cbaEpnCE54xu7JRPI4UKfFP00TQMb2avc');
-        header('Content-Type: application/json');
+
 
         $YOUR_DOMAIN = 'http://localhost:8000';
 
@@ -70,55 +82,45 @@ class PaymentController extends AbstractController
         return $this->redirect($checkout_session->url);
     }
 
-
-
-/**
- * Méthode appelée lorsque le paiement est validé
- */
-#[Route('/commande/valide/{stripeSession}', name: 'payment_success')]
-public function paymentSuccess(OrderRepository $repository, $stripeSession, EntityManagerInterface $em, CartService $cart, UserRepository $user): Response 
-{
-    $order = $repository->findOneByStripeSession($stripeSession);
-
-    if (!$order || $order->getUser() != $this->getUser()) {
-        throw $this->createNotFoundException('Commande inaccessible');
-    }
-    if (!$order->getState()) {
-        $order->setState(1);
-        $em->flush();
-    }
-
-    // Envoi mail de Confirmation
-    $userEntity = $order->getUser(); // Get the user entity associated with the order
-
-    $content = "Bonjour {$userEntity->getFirstname()} nous vous remercions de votre commande";
-    (new Mail)->send(
-        $userEntity->getEmail(), 
-        $userEntity->getFirstname(), 
-        "Confirmation de la commande {$order->getReference()}", 
-        $content
-    );
-
-    // Suppression du panier une fois la commande validée
-    
-    return $this->render('payment/success.html.twig', [
-        'order' => $order
-    ]);
-}
-
     /**
-     * Commande annullée (clic sur retour dans la fenêtre)
+     * Méthode appelée lorsque le paiement est validé
      */
-    #[Route('/commande/echec/{stripeSession}', name: 'payment_fail')]
-    public function paymentFail(OrderRepository $repository, $stripeSession) 
+    #[Route('/commande/valide/{stripeSession}', name: 'payment_success')]
+    public function paymentSuccess(OrderRepository $repository, $stripeSession, EntityManagerInterface $em, CartService $cart, UserRepository $user, EventDispatcherInterface $dispatcher): Response 
     {
         $order = $repository->findOneByStripeSession($stripeSession);
+
         if (!$order || $order->getUser() != $this->getUser()) {
-            throw $this->createNotFoundException('Commande innaccessible');
+            throw $this->createNotFoundException('Commande inaccessible');
+        }
+        if (!$order->getState()) {
+            $order->setState(1);
+            $em->flush();
         }
 
-        return $this->render('payment/fail.html.twig', [
-            'order' => $order
-        ]);
+        // Suppression du panier une fois la commande validée
+        $this->cartService->empty();
+        // 3.1 Lancer un événement qui permet d'envoyer un mail à la prise d'une commande
+        $orderEvent = new OrderSuccessEvent($order);
+        $dispatcher->dispatch($orderEvent, 'order.success');
+        // 4. Je redirige avec un flash vers la liste des commandes
+        $this->addFlash('success', 'La commande a été payée et confirmée');
+        return $this->redirectToRoute('account_order');
     }
+
+        /**
+         * Commande annullée (clic sur retour dans la fenêtre)
+         */
+        #[Route('/commande/echec/{stripeSession}', name: 'payment_fail')]
+        public function paymentFail(OrderRepository $repository, $stripeSession) 
+        {
+            $order = $repository->findOneByStripeSession($stripeSession);
+            if (!$order || $order->getUser() != $this->getUser()) {
+                throw $this->createNotFoundException('Commande innaccessible');
+            }
+
+            return $this->render('payment/fail.html.twig', [
+                'order' => $order
+            ]);
+        }
 }
