@@ -1,17 +1,18 @@
 <?php
-namespace App\Models;
+
+namespace App\Service;
 
 use Mailjet\Client;
 use Mailjet\Resources;
 
-class Mail 
+class Mail
 {
-    private $api_key = "pk_test_51PYmV7Ek3IUhoeZsuFiSE6qmyRQJP9DaqekFjEqVUKsN5Up7FvtT4VgNjystKR38y9UkiQ6OtVFLMZmFaXqa3Xb000AF9owrMt";
-    private $api_key_secret = "sk_test_51PYmV7Ek3IUhoeZsQjEW2etfg1ttQ2lAviitRad21SaSYgs3OXvRoNVeSzXAg9Vh7cbaEpnCE54xu7JRPI4UKfFP00TQMb2avc";
+    private $apiKey = "pk_test_51PYmV7Ek3IUhoeZsuFiSE6qmyRQJP9DaqekFjEqVUKsN5Up7FvtT4VgNjystKR38y9UkiQ6OtVFLMZmFaXqa3Xb000AF9owrMt";
+    private $apiKeySecret = "sk_test_51PYmV7Ek3IUhoeZsQjEW2etfg1ttQ2lAviitRad21SaSYgs3OXvRoNVeSzXAg9Vh7cbaEpnCE54xu7JRPI4UKfFP00TQMb2avc";
 
     public function send(string $emailTo, string $name, string $subject, string $content)
     {
-        $mj = new Client($this->api_key, $this->api_key_secret,true,['version' => 'v3.1']);
+        $mj = new Client($this->apiKey, $this->apiKeySecret,true,['version' => 'v3.1']);
         $body = [
             'Messages' => [
                 [
@@ -36,6 +37,12 @@ class Mail
             ]
         ];
         $response = $mj->post(Resources::$Email, ['body' => $body]);
-        ($response->success()) && dd($response->getData());
+        if ($response->success()) {
+            // Log or debug the response data
+            dump($response->getData());
+        } else {
+            // Log or debug the error
+            dump($response->getReasonPhrase());
+        }
     }
 }

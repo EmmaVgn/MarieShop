@@ -3,10 +3,9 @@
 namespace App\Controller;
 
 use App\Cart\CartService;
-use App\Entity\Order;
-use App\Model\Cart;
+
 use App\Repository\OrderRepository;
-use App\Models\Mail;
+use App\Service\Mail;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Checkout\Session;

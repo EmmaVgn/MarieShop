@@ -2,14 +2,14 @@
 
 namespace App\Entity\Trait;
 
-use Doctrine\DBAL\Types\Types;
+
 use Doctrine\ORM\Mapping as ORM;
 
 
 trait CreatedAtTrait
 {
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private  $createdAt ;
+    #[ORM\Column( options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTimeImmutable $createdAt = null ;
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {

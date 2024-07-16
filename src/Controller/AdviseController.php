@@ -20,7 +20,7 @@ class AdviseController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'advise_show', priority: -1)]
+    #[Route('/blog/{slug}', name: 'advise_show')]
     public function show($slug, AdviseRepository $adviseRepository): Response
     {
         $advise = $adviseRepository->findOneBy(['slug' => $slug]);
