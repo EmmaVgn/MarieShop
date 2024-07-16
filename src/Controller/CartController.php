@@ -4,11 +4,11 @@ namespace App\Controller;
 
 use App\Cart\CartService;
 use App\Repository\ProductRepository;
-use App\Form\CartConfirmationFormType;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\CartConfirmationFormType;
+use Symfony\Component\HttpFoundation\Request;
 
 class CartController extends AbstractController
 {
@@ -28,13 +28,8 @@ class CartController extends AbstractController
         if (!$product) {
             throw $this->createNotFoundException("Le produit $id n'existe pas");
         }
-        $quantity = $request->query->getInt('quantity', 1); // Utilisation de 1 comme valeur par défaut
 
-        if ($quantity < 1) {
-            throw $this->createNotFoundException("Quantité invalide.");
-        }
-    
-        $this->cartService->add($id, $quantity);
+        $this->cartService->add($id);
 
         $this->addFlash('success', "Le produit a bien été ajouté au panier");
 
@@ -55,12 +50,9 @@ class CartController extends AbstractController
         $detailedCart = $this->cartService->getDetailedCartItems();
         $total = $this->cartService->getTotal();
 
-        
-
         return $this->render('cart/index.html.twig', [
             'items' => $detailedCart,
             'total' => $total,
-
             'confirmationForm' => $form->createView()
         ]);
     }

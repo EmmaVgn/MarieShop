@@ -1,7 +1,7 @@
 <h1>Activez votre compte</h1>
 <p>Bonjour
 	{{ user.firstname }},</p>
-<p>Votre inscription sur le site elearning est à valider en cliquant sur le lien ci-dessous :</p>
+<p>Votre inscription sur le site MarieShop est à valider en cliquant sur le lien ci-dessous :</p>
 <p>
 	<a href="{{ absolute_url(path('registration_verifyUser', {token: token})) }}">{{ absolute_url(path('registration_verifyUser', {token: token})) }}</a>
 </p>

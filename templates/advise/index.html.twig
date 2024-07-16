@@ -18,17 +18,24 @@
 								<div class="col-sm-6">
 									<div class="blog-grid">
 										<div class="blog-img">
-											<div class="date"></div>
+											<div class="date">
+												<span>
+													{{ advise.createdAt|format_datetime('medium', 'none', locale='fr') }}
+												</span>
+
+												<img src="{{ vich_uploader_asset(advise, 'imageFile') }}" alt="{{ advise.name}}" class="img-fluid">
+
+											</div>
 
 										</div>
 										<div class="blog-info">
 											<h5>
-												{{ advise.title }}
+												{{ advise.name }}
 
 											</h5>
 											{{ advise.subtitle}}
 											<div class="btn-bar">
-												<a href="{{ advise.slug}}" class="px-btn-arrow">
+												<a href="{{ path('advise_show', {'slug': advise.slug}) }}" class="px-btn-arrow">
 													<span>Lire plus</span>
 													<i class="arrow"></i>
 												</a>

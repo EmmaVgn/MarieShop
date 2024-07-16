@@ -7,9 +7,12 @@ use App\Entity\Trait\SlugTrait;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Repository\AdviseRepository;
-use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 #[ORM\Entity(repositoryClass: AdviseRepository::class)]
+#[Vich\Uploadable]
 class Advise
 {
     use SlugTrait;
@@ -21,7 +24,7 @@ class Advise
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     private ?string $subtitle = null;
@@ -29,8 +32,14 @@ class Advise
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $image = null;
+    #[Vich\UploadableField(mapping: 'advise', fileNameProperty: 'imageName')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -42,14 +51,14 @@ class Advise
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getName(): ?string
     {
-        return $this->title;
+        return $this->name;
     }
 
-    public function setTitle(string $title): static
+    public function setName(string $name): static
     {
-        $this->title = $title;
+        $this->name = $name;
         return $this;
     }
 
@@ -75,31 +84,39 @@ class Advise
         return $this;
     }
 
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
+        /**
+         *
+    *If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+    *of 'UploadedFile' is injected into this setter to trigger the update. If this
+    *bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+    *must be able to accept an instance of 'File' as the bundle will inject one here
+    *during Doctrine hydration.
+    *
+    *@param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+    */
+    public function setImageFile(?File $imageFile = null): void{$this->imageFile = $imageFile;
 
-    public function setImage(?string $image): static
-    {
-        $this->image = $image;
-        return $this;
-    }
-    
-    // Méthode pour générer le slug avec un préfixe
-    public function generateSlug(SluggerInterface $slugger): void
-    {
-        if ($this->title) {
-            $this->slug = 'blog/' . $slugger->slug($this->title)->lower();
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
         }
     }
 
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updateSlug(SluggerInterface $slugger): void
+    public function getImageFile(): ?File
     {
-        $this->generateSlug($slugger);
+        return $this->imageFile;
     }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+    
+    
 }
