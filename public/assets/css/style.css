@@ -471,3 +471,11 @@ td {
 thead {
   background-color: #f4f4f4;
 }
+
+/*--------------------------------------------------------------
+  # featurette homepage
+  --------------------------------------------------------------*/
+.featurette .col-md-5 {
+  display: flex;
+  align-items: center;
+}
