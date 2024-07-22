@@ -20,12 +20,12 @@ class HomeController extends AbstractController
     public function index(ProductRepository $productRepository,CommentRepository $commentRepository,  HeadersRepository $headersRepository): Response
     {
         $products = $productRepository->findBy([], [], 3);
+        // findBy(['isHilighted' => true],['price' => 'ASC'], 3) : permet de récupérer les 3 produits mis en avant;
         $headers = $headersRepository->findAll();
         $comments = $commentRepository->findBy(['isValid' => true], ['createdAt' => 'DESC']);
         $averageRating = $commentRepository->averageRating();
 
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
             'carousel' => true,  //Le caroussel ne s'affiche que sur la page d'accueil (voir base.twig)
             'top_products' => $products,
             'headers' => $headers,

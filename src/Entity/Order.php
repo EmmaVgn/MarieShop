@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: '`order`')]
 class Order
 {
@@ -35,9 +36,6 @@ class Order
     #[ORM\OneToMany(mappedBy: 'bindedOrder', targetEntity: OrderDetails::class)]
     private $orderDetails;
 
-    #[ORM\Column(type: 'boolean')]
-    private $isPaid = false;
-
     #[ORM\Column(type: 'string', length: 255)]
     private $reference;
 
@@ -46,6 +44,9 @@ class Order
 
     #[ORM\Column(type: 'integer')]
     private $state;
+
+    #[ORM\Column]
+    private ?int $total = null;
 
     public function __construct()
     {
@@ -147,15 +148,16 @@ class Order
         return $this;
     }
 
-    public function getTotal():float
-    {
-        $total = 0;
-        foreach ($this->getOrderDetails() as $product) {
-            $total += $product->getTotal();
-        }
-        return $total;
+   //[ORM\PreFlush]
+   //public function preFlush()
+    //{
+    //    $total = 0;
+    //    foreach ($this->getOrderDetails() as $item) {
+    //        $total += $item->getTotal();
+    //    }
+    //    $this->total =$total;
   
-    }
+   // }
 
     public function getTotalQuantity():float
     {
@@ -165,19 +167,7 @@ class Order
         }
         return $total;
   
-    }
-
-    public function getIsPaid(): ?bool
-    {
-        return $this->isPaid;
-    }
-
-    public function setIsPaid(bool $isPaid): self
-    {
-        $this->isPaid = $isPaid;
-
-        return $this;
-    }
+}
 
     public function getReference(): ?string
     {
@@ -211,6 +201,18 @@ class Order
     public function setState(int $state): self
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    public function getTotal(): ?int
+    {
+        return $this->total;
+    }
+
+    public function setTotal(int $total): static
+    {
+        $this->total = $total;
 
         return $this;
     }

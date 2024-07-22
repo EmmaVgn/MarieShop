@@ -20,6 +20,7 @@
 			</thead>
 			<tbody>
 				{% for order in orders %}
+
 					<tr>
 						<td>{{order.totalQuantity}}</td>
 						<td>{{
@@ -30,10 +31,10 @@
 							€</td>
 						<td>{{order.createdAt|date('d/m/Y')}}</td>
 						<td>
-							<span class="badge badge-secondary">{{order.id}}</span>
+							<span class="badge text-bg-secondary">{{order.reference}}</span>
 						</td>
 						<td>
-							<a href="{{ path('account_order', {'reference' : order.id}) }}">Consulter commande</a>
+							<a href="{{ path('account_order', {'reference' : order.reference}) }}">Consulter commande</a>
 						</td>
 					</tr>
 				{% endfor %}

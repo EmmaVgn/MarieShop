@@ -23,6 +23,9 @@
 					</div>
 				{% endfor %}
 				<hr>
+				<pre>
+					{{ dump(order) }}
+				</pre>
 				<div class="row">
 					<div class="col-9 font-weight-bold">Total articles</div>
 					<div class="col-3">{{ (totalPrice / 100)|number_format(2,',','.') }}

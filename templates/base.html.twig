@@ -30,7 +30,10 @@
 		<header>
 			{% include "shared/_navbar.html.twig" %}
 		</header>
+
 		<main class="" role="main">
+			{% include "shared/_flash.html.twig"%}
+
 			{% if carousel is defined %}
 				{% include "shared/_carousel.html.twig" %}
 			{% else %}

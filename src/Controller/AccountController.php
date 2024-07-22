@@ -71,7 +71,7 @@ class AccountController extends AbstractController
         /**
      * Affiche la vue de toutes les commandes d'un utilisateur
      */
-    #[Route('/compte/commandes', name: 'account_order')]
+    #[Route('/compte/commandes', name: 'account_orders')]
     public function showOrders(OrderRepository $repository): Response
     {
         $orders = $repository->findPaidOrdersByUser($this->getUser());
@@ -83,12 +83,18 @@ class AccountController extends AbstractController
     /**
      * Affiche une commande
      */
-    #[Route('/compte/commandes/{reference}', name: 'account_orders')]
-    public function showOrder(Order $order): Response
+    #[Route('/compte/commandes/{reference}', name: 'account_order')]
+    public function showOrder($reference, OrderRepository $orderRepository ): Response
     {
+        $order = $orderRepository->findOneBy ([
+            'reference' => $reference
+        ]);
+       
+
         if (!$order || $order->getUser() != $this->getUser()) {
             throw $this->createNotFoundException('Commande innaccessible');
         }
+        
         return $this->render('account/order.html.twig', [
             'order' => $order
         ]);
