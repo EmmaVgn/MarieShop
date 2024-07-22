@@ -45,8 +45,8 @@ class Order
     #[ORM\Column(type: 'integer')]
     private $state;
 
-    #[ORM\Column]
-    private ?int $total = null;
+    #[ORM\Column(type:'float')]
+    private ?float $total = null;
 
     public function __construct()
     {

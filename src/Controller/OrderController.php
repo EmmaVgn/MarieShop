@@ -69,6 +69,7 @@ class OrderController extends AbstractController
     public function summary(CartService $cart, Request $request, EntityManagerInterface $em): Response
     {
         $cartProducts = $cart->getDetailedCartItems();
+        $totalPrice = $cart->getTotal(); // Total price of the cart
 
         $form = $this->createForm(OrderFormType::class, null, [
             'user' => $this->getUser()
@@ -98,7 +99,8 @@ class OrderController extends AbstractController
                 ->setCarrierPrice($carrier->getPrice())
                 ->setDelivery($deliveryString)
                 ->setState(0)
-                ->setReference((new \DateTime())->format('YmdHis') . '-' . uniqid());
+                ->setReference((new \DateTime())->format('YmdHis') . '-' . uniqid())
+                ->setTotal($totalPrice); // Set the total price here
 
             $em->persist($order);
 
@@ -117,11 +119,12 @@ class OrderController extends AbstractController
 
             return $this->render('order/add.html.twig', [
                 'cart' => $cartProducts,
-                'totalPrice' => $cart->getTotal(),
+                'totalPrice' => $totalPrice,
                 'order' => $order
             ]);
         }
 
         return $this->redirectToRoute('cart');
     }
+
 }

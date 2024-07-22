@@ -105,7 +105,7 @@ class PaymentController extends AbstractController
         $dispatcher->dispatch($orderEvent, 'order.success');
         // 4. Je redirige avec un flash vers la liste des commandes
         $this->addFlash('success', 'La commande a été payée et confirmée');
-        return $this->redirectToRoute('account_order');
+        return $this->redirectToRoute('account_orders', ['reference' => $order->getReference()]);
     }
 
         /**

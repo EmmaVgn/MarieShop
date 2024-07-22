@@ -68,18 +68,19 @@ class CartService
     public function getTotal(): float
     {
         $total = 0;
-
+    
         foreach ($this->getCart() as $id => $qty) {
             $product = $this->productRepository->find($id);
             if (!$product) {
-                continue;
+                continue; // Passez au produit suivant si le produit n'existe pas
             }
-
+    
             $total += $product->getPrice() * $qty;
         }
-
+    
         return $total;
     }
+    
 
     /**
      * @return CartItem[]

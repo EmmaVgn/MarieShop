@@ -96,7 +96,8 @@ class AccountController extends AbstractController
         }
         
         return $this->render('account/order.html.twig', [
-            'order' => $order
+            'order' => $order,
+            'reference' => $order->getReference()
         ]);
     }
 }
