@@ -2,13 +2,12 @@
 
 {% block title %}Ma commande - MarieShop
 {% endblock %}
-
 {% block body %}
 	<h2>Je valide ma commande</h2>
 	<div class="row">
 		<div class="col-md-6">
 			{% set formHtml %}
-			{{ form_start(form, {action:path('order_add')}) }}
+			{{ form_start(form, {action: path('order_add')}) }}
 			{{ form_label(form.addresses, 'Choisissez votre adresse de livraison') }}
 			<a class="d-block mb-3" href="{{ path('account_address_new') }}">Ajouter nouvelle adresse</a>
 			{{ form_end(form) }}
@@ -19,7 +18,6 @@
 			<strong class="summary-label">Récapitulatif :</strong>
 			<div class="cart-summary">
 				{% for item in cart %}
-
 					<div class="row">
 						<div class="col-2 my-auto"></div>
 						<div class="col-8 my-auto">{{ item.product.name }}</div>
@@ -29,9 +27,30 @@
 				{% endfor %}
 
 				<div class="row">
-					<div class="col-9 font-weight-bold">Total</div>
+					<div class="col-9 font-weight-bold">Total articles</div>
 					<div class="col-3 font-weight-bold">{{ (totalPrice / 100)|number_format(2, ',', '.') }}
 						€</div>
+				</div>
+
+				<div class="row">
+					<div class="col-9 font-weight-bold">Livraison</div>
+					<div class="col-3">
+						{% if (totalPrice / 100) > 49 %}
+							Livraison offerte
+						{% else %}
+							{{ (order.carrierPrice / 100)|number_format(2, ',', '.') }}
+							€
+						{% endif %}
+					</div>
+				</div>
+
+				<hr>
+				<div class="row">
+					<div class="col-9 font-weight-bold">Total commande</div>
+					<div class="col-3 font-weight-bold">
+						{{ (((totalPrice / 100) + (order.carrierPrice / 100))|number_format(2, ',', '.')) }}
+						€
+					</div>
 				</div>
 			</div>
 		</div>

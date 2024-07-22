@@ -48,6 +48,9 @@ class Order
     #[ORM\Column(type:'float')]
     private ?float $total = null;
 
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?Carrier $carriers = null;
+
     public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
@@ -167,7 +170,18 @@ class Order
         }
         return $total;
   
-}
+    }
+
+    public function calculateCarrierPrice(float $totalPrice): void
+    {
+        // Le prix du transporteur est gratuit si le total dépasse 49 €
+        if ($totalPrice > 49) {
+            $this->carrierPrice = 0;
+        } else {
+            $this->carrierPrice = $this->carrierPrice; // Sinon, utiliser le prix du transporteur par défaut
+        }
+    }
+
 
     public function getReference(): ?string
     {
@@ -213,6 +227,18 @@ class Order
     public function setTotal(int $total): static
     {
         $this->total = $total;
+
+        return $this;
+    }
+
+    public function getCarriers(): ?Carrier
+    {
+        return $this->carriers;
+    }
+
+    public function setCarriers(?Carrier $carriers): static
+    {
+        $this->carriers = $carriers;
 
         return $this;
     }

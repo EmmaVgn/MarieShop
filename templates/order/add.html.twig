@@ -8,45 +8,69 @@
 	<div class="row">
 		<div class="col-md-5">
 			<strong>Mon adresse de livraison</strong><br>
-			<p>{{order.delivery|raw}}</p>
+			<p>{{ order.delivery|raw }}</p>
 
 			<strong>Transporteur</strong>
-			<p>{{order.carrierName}}</p>
+			<p>{{ order.carrierName }}</p>
+			<div class="row">
+				<div class="col-9 font-weight-bold">Livraison</div>
+				<div class="col-3">
+					{% if (totalPrice / 100) > 49 %}
+						Livraison offerte
+					{% else %}
+						{{ (order.carrierPrice / 100)|number_format(2, ',', '.') }}
+						€
+					{% endif %}
+				</div>
+			</div>
 		</div>
 		<div class="col-md-7">
 			<strong class="summary-label">Vos articles</strong>
 			<div class="cart-summary">
 				{% for item in cart %}
 					<div class="row">
-						<div class="col-8 my-auto">{{ item.product.name }}</div>
-						<div class="col-2 my-auto">x{{ item.quantity }}</div>
-
+						<div class="col-6 my-auto">{{ item.product.name }}</div>
+						<div class="col-2 my-auto text-center">x{{ item.quantity }}</div>
+						<div class="col-2 my-auto text-right">
+							{{ (item.product.price / 100)|number_format(2, ',', '.') }}
+							€
+						</div>
+						<div class="col-2 my-auto text-right">
+							{{ (item.getTotal() / 100)|number_format(2, ',', '.') }}
+							€
+						</div>
 					</div>
+					<hr>
 				{% endfor %}
-				<hr>
-
 
 				<div class="row">
 					<div class="col-9 font-weight-bold">Total articles</div>
-					<div class="col-3">{{ (totalPrice / 100)|number_format(2,',','.') }}
-						€</div>
+					<div class="col-3 text-right">
+						{{ (totalPrice / 100)|number_format(2, ',', '.') }}
+						€
+					</div>
 				</div>
-				<div class="row">
-					<div class="col-9 font-weight-bold">Livraison</div>
-					<div class="col-3">{{ (order.carrierPrice/100)|number_format(2,',','.')}}
-						€</div>
-				</div>
+
 				<hr>
 				<div class="row">
+					<div class="col-9 my-auto">{{ order.carrierName }}</div>
+					<div class="col-3 text-right">
+						{{ (order.carrierPrice / 100)|number_format(2, ',', '.') }}
+						€
+					</div>
+				</div>
+				<div class="row">
 					<div class="col-9 font-weight-bold">Total commande</div>
-					<div class="col-3 font-weight-bold">{{ ((totalPrice / 100) + order.carrierPrice / 100)|number_format(2,',','.') }}
-						€</div>
+					<div class="col-3 font-weight-bold text-right">
+						{{ ((totalPrice / 100) + (order.carrierPrice / 100))|number_format(2, ',', '.') }}
+						€
+					</div>
 				</div>
 			</div>
 		</div>
-		<a href="{{ path('checkout', {reference: order.reference}) }}" class="btn btn-outline-success btn-block mt-4">
+		<a href="{{ path('checkout', { reference: order.reference }) }}" class="btn btn-outline-success btn-block mt-4">
 			<i class="bi bi-credit-card-2-back"></i>
-			Payer</a>
+			Payer
+		</a>
 	</div>
-
 {% endblock %}

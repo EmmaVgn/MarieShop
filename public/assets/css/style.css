@@ -494,11 +494,3 @@ thead {
   transform: translateY(0);
   transition: 1s cubic-bezier(0.5, 0, 0, 1);
 }
-
-.reveal-2 {
-  transition-delay: 0.1s;
-}
-
-.reveal-3 {
-  transition-delay: 0.2s;
-}

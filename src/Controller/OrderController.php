@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\User;
 
 class OrderController extends AbstractController
 {
@@ -25,35 +25,37 @@ class OrderController extends AbstractController
      * @return Response
      */
     #[Route('/commande', name: 'order')]
-    public function index(SessionInterface $session, CartService $cart, UserRepository $user): Response
+    public function index(SessionInterface $session, CartService $cart, UserRepository $userRepository): Response
     {
         /** @var User */
         $user = $this->getUser();
         $cartProducts = $cart->getDetailedCartItems();
-
-        // // Redirection si panier vide
+    
+        // Redirection si panier vide
         if (empty($cartProducts)) {
             return $this->redirectToRoute('product_display');
         }
-
-
-        //Redirection si utilisateur n'a pas encore d'adresse
-
+    
+        // Redirection si utilisateur n'a pas encore d'adresse
         if (!$user->getAddresses() || $user->getAddresses()->isEmpty()) {
-            // Cette ligne peut être problématique si getAddresses() renvoie une collection
-            // La collection ne peut pas être convertie en chaîne directement
             $session->set('order', 1);
             return $this->redirectToRoute('account_address_new');
         }
-
+    
         $form = $this->createForm(OrderFormType::class, null, [
-            'user' => $user     //Permet de passer l'utilisateur courant dans le tableau d'options du OrderType
-        ]); 
-
+            'user' => $user
+        ]);
+    
+        // Create an instance of the Order entity
+        $order = new Order();
+        $order->setUser($user);
+        $order->calculateCarrierPrice($cart->getTotal() / 100);
+    
         return $this->render('order/index.html.twig', [
             'form' => $form->createView(),
             'cart' => $cartProducts,
-            'totalPrice' => $cart->getTotal()
+            'totalPrice' => $cart->getTotal(),
+            'order' => $order // Pass the order object to the template
         ]);
     }
 
@@ -80,6 +82,10 @@ class OrderController extends AbstractController
             $address = $form->get('addresses')->getData();
             $carrier = $form->get('carriers')->getData();
 
+            // Déterminer si la livraison est gratuite
+            $isFreeShipping = ($totalPrice / 100) > 49;
+            $carrierPrice = $isFreeShipping ? 0 : $carrier->getPrice();
+
             $deliveryString = sprintf(
                 '%s %s<br>%s<br>%s%s<br>%s<br>%s<br>%s',
                 $address->getFirstname(),
@@ -96,7 +102,7 @@ class OrderController extends AbstractController
             $order->setUser($this->getUser())
                 ->setCreatedAt(new \DateTime())
                 ->setCarrierName($carrier->getName())
-                ->setCarrierPrice($carrier->getPrice())
+                ->setCarrierPrice($carrierPrice)
                 ->setDelivery($deliveryString)
                 ->setState(0)
                 ->setReference((new \DateTime())->format('YmdHis') . '-' . uniqid())
@@ -126,5 +132,4 @@ class OrderController extends AbstractController
 
         return $this->redirectToRoute('cart');
     }
-
 }
