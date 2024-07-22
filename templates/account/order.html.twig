@@ -1,3 +1,44 @@
-<pre>
+{% block body %}
+	<h2>Commande
+		{{ order.reference }}
+	</h2>
 
-</pre>
+	<table>
+		<thead>
+			<tr>
+				<th>Produit</th>
+				<th>Quantité</th>
+				<th>Prix unitaire</th>
+				<th>Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in order.orderDetails %}
+				<tr>
+					<td>{{ item.product }}</td>
+					<td>{{ item.quantity }}</td>
+					<td>{{ item.price / 100 }}
+						€</td>
+					<td>{{ (item.price * item.quantity) / 100 }}
+						€</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="3" style="text-align:right;">Frais de port :</td>
+				<td>{{ order.carrierPrice / 100 }}
+					€</td>
+			</tr>
+			<tr>
+				<td colspan="3" style="text-align:right;">Total :</td>
+				<td>{{ (order.getTotal() + order.carrierPrice) / 100 }}
+					€</td>
+			</tr>
+		</tfoot>
+	</table>
+
+	<h4>La commande sera livrée à :</h4>
+	<p>{{ order.delivery|raw }}</p>
+
+{% endblock %}
