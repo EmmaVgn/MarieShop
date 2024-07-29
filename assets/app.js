@@ -19,8 +19,6 @@ import { Carousel } from "bootstrap";
 new Filter(document.querySelector('.js-filter'))
 
 const priceSlider = document.getElementById('price-slider');
-const kmsSlider = document.getElementById('kms-slider');
-const dateSlider = document.getElementById('date-slider');
 
 if (priceSlider) {
     const min = document.getElementById('minPrice');
@@ -53,36 +51,6 @@ if (priceSlider) {
     })
 }
 
-if (kmsSlider) {
-    const min = document.getElementById('minKms');
-    const max = document.getElementById('maxKms');
-    const minValue = Math.floor(parseInt(kmsSlider.dataset.min, 10));
-    const maxValue = Math.ceil(parseInt(kmsSlider.dataset.max, 10));
-    const range = noUiSlider.create(kmsSlider, {
-        start: [min.value || minValue, max.value || maxValue],
-        connect: true,
-        step: 10,
-        range: {
-            'min': minValue,
-            'max': maxValue
-        }
-    });
-    range.on('slide', function (values, handle) {
-        if (handle === 0) {
-            min.value = Math.round(values[0])
-        }
-        if (handle === 1) {
-            max.value = Math.round(values[1])
-        }
-    })
-    range.on('end', function (values, handle) {
-        if (handle === 0) {
-            min.dispatchEvent(new Event('change'))
-        } else {
-            max.dispatchEvent(new Event('change'))
-        }
-    })
-}
 
 
 // Close alert message after 5 secondes

@@ -2,8 +2,7 @@
 
 namespace App\Data;
 
-use DateTime;
-use App\Entity\Model;
+
 use App\Entity\Category;
 
 class SearchData

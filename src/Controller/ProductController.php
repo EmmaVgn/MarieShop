@@ -8,6 +8,7 @@ use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -59,6 +60,20 @@ class ProductController extends AbstractController
         [$minPrice, $maxPrice] = $productRepository->findMinMaxPrice($data);
         $products = $productRepository->findSearch($data);
         $totalItems = $productRepository->countItems($data);
+
+        if ($request->get('ajax')) {
+            return new JsonResponse([
+                'content' => $this->renderView('product/_products.html.twig', [
+                    'products' => $products,
+                ]),
+                'sorting' => $this->renderView('product/_sorting.html.twig', ['products' => $products]),
+                'pagination' => $this->renderView('product/_pagination.html.twig', ['products' => $products]),
+                'minPrice' => $minPrice,
+                'maxPrice' => $maxPrice,
+
+            ]);
+        }
+
         return $this->render('product/display.html.twig', [
             'products' => $products,
             'form' => $form,
