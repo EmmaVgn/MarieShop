@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
-use ApiPlatform\Metadata\ApiResource;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -16,15 +15,19 @@ class Comment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])   ]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    #[Assert\GreaterThanOrEqual(value: 0, message: 'La note doit être supérieure ou égale à 0 !')]
-    #[Assert\LessThanOrEqual(value: 5, message: 'La note doit être inférieure ou égale à 5 !')]
+    #[ORM\Column(type: Types::INTEGER)]
+    #[Assert\Range(
+        min: 120,
+        max: 180,
+        notInRangeMessage: 'Na note doit être entre {{ 0 }} et {{ 5 }}',
+    )]
     private ?int $rating = null;
 
     #[ORM\Column(length: 255)]
+
     #[Assert\NotBlank(message: 'Le nom complet est obligatoire !')]
     private ?string $fullname = null;
 
@@ -35,9 +38,18 @@ class Comment
     #[ORM\Column]
     private ?bool $isValid = false;
 
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Product $product = null;
+
+
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->isValid = false;
     }
 
     public function getId(): ?int
@@ -62,7 +74,7 @@ class Comment
         return $this->rating;
     }
 
-    public function setRating(int $rating): static
+    public function setRating(int $rating): self
     {
         $this->rating = $rating;
 
@@ -101,6 +113,30 @@ class Comment
     public function setIsValid(bool $isValid): static
     {
         $this->isValid = $isValid;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): static
+    {
+        $this->product = $product;
 
         return $this;
     }

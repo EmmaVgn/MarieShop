@@ -139,13 +139,85 @@
 					</div>
 				</div>
 			</div>
+			<div class="mt-4">
+				<h2>Avis sur
+					{{ product.name }}</h2>
+				{% if averageRating > 0 %}
+					<div class="mb-3">
+						<strong>Note moyenne:</strong>
+						<div class="rating">
+							{% for i in 1..5 %}
+								<span class="star {% if i <= averageRating %}filled{% endif %}">&#9733;</span>
+							{% endfor %}
+							<span>{{ averageRating | number_format(1) }}/5</span>
+						</div>
+					</div>
+				{% endif %}
+
+				<!-- Slider des avis -->
+				<div id="reviewsCarousel" class="carousel slide">
+					<div class="carousel-inner">
+						{% for comment in comments %}
+							<div class="carousel-item {% if loop.first %}active{% endif %}">
+								<div class="card mb-3">
+									<div class="card-body">
+										<h5 class="card-title">{{ comment.fullname }}</h5>
+										<div class="rating mb-2">
+											{% for i in 1..5 %}
+												<span class="star {% if i <= comment.rating %}filled{% endif %}">&#9733;</span>
+											{% endfor %}
+										</div>
+										<p class="card-text">{{ comment.content }}</p>
+										<p class="card-text text-muted">{{ comment.createdAt | date('d/m/Y') }}</p>
+									</div>
+								</div>
+							</div>
+						{% else %}
+							<p>Aucun avis pour ce produit.</p>
+						{% endfor %}
+					</div>
+					<button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Précédent</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Suivant</span>
+					</button>
+				</div>
+			</div>
+			<!-- Formulaire pour laisser un avis -->
+			<div class="mt-4">
+				{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+					<h3>Laisser un avis</h3>
+					{{ form_start(commentForm, {'attr': {'class': 'row g-3'}}) }}
+					<div class="col-md-12">
+						<div class="star-rating mb-3">
+							<span>Évaluation :</span>
+							{% for i in 1..5 %}
+								<i class="far fa-star" data-rating="{{ i }}"></i>
+							{% endfor %}
+						</div>
+						{{ form_widget(commentForm.fullname, {'attr': {'class': 'form-control', 'placeholder': 'Votre nom complet'}}) }}
+					</div>
+					<div class="col-md-12">
+						{{ form_widget(commentForm.content, {'attr': {'class': 'form-control', 'placeholder': 'Votre commentaire'}}) }}
+					</div>
+					<input type="hidden" name="comment[rating]" id="ratingInput" value="0">
+					<div class="col-md-12 text-end">
+						<button type="submit" class="btn btn-primary">Envoyer</button>
+					</div>
+					{{ form_end(commentForm) }}
+				{% else %}
+					<p>Vous devez être connecté pour laisser un avis.</p>
+				{% endif %}
+			</div>
 		</div>
 
 		<!-- Produits similaires -->
 		<div class="mt-4">
 			<h2>Produits similaires</h2>
 			<div class="row">
-
 				{% for similarProduct in similarProducts %}
 					<div class="col-md-3 mb-4">
 						<div class="card">
@@ -158,21 +230,89 @@
 								<a href="{{ path('product_show', { 'category_slug': product.category.slug, 'slug': product.slug }) }}">
 									{{ product.name }}
 								</a>
-
-							</div>
+								Voir le produit</a>
 						</div>
 					</div>
-				{% else %}
-					<p>Aucun produit similaire trouvé.</p>
-				{% endfor %}
-			</div>
+				</div>
+			{% else %}
+				<p>Aucun produit similaire trouvé.</p>
+			{% endfor %}
 		</div>
 	</div>
-{% endblock %}
-{% block javascripts %}
-	<script src="{{ asset('assets/js/shop.js') }}" defer></script>
-	<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
-{% endblock %}
+</div>{% endblock %}{% block javascripts %}
+<script src="{{ asset('assets/js/shop.js') }}" defer></script>
+<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+const ratingInput = document.querySelector('#ratingInput');
+const starRating = document.querySelector('.star-rating');
+
+if (starRating && ratingInput) {
+starRating.addEventListener('click', function (event) {
+if (event.target.matches('i')) {
+const ratingValue = event.target.getAttribute('data-rating');
+ratingInput.value = ratingValue;
+
+// Mise à jour des étoiles affichées
+starRating.querySelectorAll('i').forEach(function (star) {
+const starRatingValue = star.getAttribute('data-rating');
+if (starRatingValue <= ratingValue) {
+star.classList.remove('far');
+star.classList.add('fas');
+} else {
+star.classList.remove('fas');
+star.classList.add('far');
+}
+});
+}
+});
+
+// Met à jour l'affichage des étoiles lors du survol
+starRating.addEventListener('mouseover', function (event) {
+if (event.target.matches('i')) {
+const ratingValue = event.target.getAttribute('data-rating');
+starRating.querySelectorAll('i').forEach(function (star) {
+const starRatingValue = star.getAttribute('data-rating');
+if (starRatingValue <= ratingValue) {
+star.classList.add('fas');
+star.classList.remove('far');
+} else {
+star.classList.add('far');
+star.classList.remove('fas');
+}
+});
+}
+});
+
+// Réinitialise les étoiles lors du survol
+starRating.addEventListener('mouseout', function () {
+const currentRating = ratingInput.value;
+starRating.querySelectorAll('i').forEach(function (star) {
+const starRatingValue = star.getAttribute('data-rating');
+if (starRatingValue <= currentRating) {
+star.classList.add('fas');
+star.classList.remove('far');
+} else {
+star.classList.add('far');
+star.classList.remove('fas');
+}
+});
+});
+}
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+const reviewsCarousel = document.getElementById('reviewsCarousel');
+if (reviewsCarousel) {
+new bootstrap.Carousel(reviewsCarousel, {
+interval: 5000, // Temps entre chaque slide (en millisecondes)
+wrap: true // Permet de faire des boucles infinies
+});
+}
+});
+</script>{% endblock %}

@@ -122,6 +122,56 @@ strong {
 }
 
 /*--------------------------------------------------------------
+# Product_show page (avis)
+--------------------------------------------------------------*/
+/* Styles pour le carousel des avis */
+.carousel-inner {
+  padding: 0 15px; /* Ajoute un peu d'espace de chaque côté */
+}
+
+.carousel-item {
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  width: 100%; /* Assure que la carte occupe toute la largeur du carousel */
+  max-width: 500px; /* Limite la largeur de la carte */
+  border: 1px solid #ddd; /* Bordure légère autour de la carte */
+  border-radius: 0.5rem; /* Coins arrondis */
+}
+
+.card-body {
+  padding: 1.5rem; /* Espacement interne de la carte */
+}
+
+.rating {
+  color: #f39c12; /* Couleur des étoiles */
+}
+
+.star {
+  font-size: 1.2rem; /* Taille des étoiles */
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%; /* Ajuste la largeur des contrôles */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Fond semi-transparent pour les icônes */
+  border-radius: 50%; /* Coins arrondis pour les boutons de contrôle */
+  width: 3rem; /* Largeur des boutons de contrôle */
+  height: 3rem; /* Hauteur des boutons de contrôle */
+}
+
+/*--------------------------------------------------------------
 # Login page
 --------------------------------------------------------------*/
 .card-fill {

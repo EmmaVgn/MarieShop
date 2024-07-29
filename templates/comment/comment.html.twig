@@ -1,0 +1,12 @@
+{# templates/comment/comment.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Laisser un commentaire{% endblock %}
+
+{% block body %}
+    <h2>Laisser un commentaire pour {{ product.name }}</h2>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}
