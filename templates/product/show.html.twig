@@ -6,11 +6,12 @@
 {% endblock %}
 
 {% block body %}
-	<h1>{{ product.name }}
-		({{ product.price | amount }})</h1>
-	<div class="row">
-		<div class="row">
-			<div class="col-lg-8 mb-md-3 mb-sm-3">
+	<div class="container mt-4">
+		<h1 class="mb-4">{{ product.name }}</h1>
+		<div
+			class="row">
+			<!-- Galerie d'images du produit -->
+			<div class="col-lg-8 mb-4">
 				<div id="carouselSingleProductIndicators" class="carousel slide carousel-fade">
 					<div class="carousel-inner">
 						{% for image in product.images %}
@@ -28,131 +29,150 @@
 						<span class="visually-hidden">Next</span>
 					</button>
 				</div>
-				<div class="accordion mt-8" id="accordionExample">
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								Description détaillée
-							</button>
-						</h2>
-						<div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-							<div class="accordion-body">
-								<strong>{{ product.name }}
-								</strong>
-								{{ product.description }}
+			</div>
 
-
-							</div>
+			<!-- Détails du produit et ajout au panier -->
+			<div class="col-lg-4">
+				<div class="card mb-4">
+					<div class="card-body text-center">
+						<h5 class="card-title">{{ product.name }}</h5>
+						<p class="card-text mb-3">
+							<span class="fw-bold fs-3">{{ product.price | amount }}</span>
+						</p>
+						<div class="d-flex justify-content-center align-items-center mb-3">
+							<form id="addToCartForm" action="{{ path('cart_add', { id: product.id }) }}" method="get">
+								<input type="hidden" name="id" value="{{ product.id }}">
+								<div class="d-flex align-items-center me-2">
+									<div class="quantity-selector d-flex align-items-center me-2">
+										<button type="button" class="btn btn-outline-secondary" id="decrementBtn">-</button>
+										<input type="number" id="quantityInput" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control mx-2" style="width: 60px;">
+										<button type="button" class="btn btn-outline-secondary" id="incrementBtn">+</button>
+									</div>
+									<div>
+										{% if product.stock > 0 %}
+											<button type="submit" class="btn btn-success">Ajouter au panier</button>
+										{% else %}
+											<p class="text-danger">Temporairement en rupture de stock</p>
+										{% endif %}
+									</div>
+								</div>
+							</form>
 						</div>
-					</div>
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								Indications techniques
-							</button>
-						</h2>
-						<div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-							<div class="accordion-body">
-								<strong>Nom botanique:
-								</strong>
-								{{ product.boticalName }}
-								<br>
-								<strong>
-									Partie de la plante:
-								</strong>
-								{{ product.partofplant }}
-								<br>
-								<strong>Méthode d'extraction:</strong>
-								{{ product.extractionMethod }}
-								<br>
-								<strong>Culture de
-									{{ product.name }}:
-								</strong>
-								{{ product.culture }}
-								<br>
+						<div class="d-flex justify-content-between mb-3">
+							<div class="me-2">
 								<strong>Contenance:
 								</strong>
-								{{ product.capacity }}
-								ml
-								<br>
+								<span class="fs-5 fw-bold">{{ product.capacity }}
+									ml</span>
+							</div>
+							<div>
 								<strong>Date Maximum de Durabilité:
 								</strong>
-								{{ product.MDD | date('Y') }}
-							</div>
-						</div>
-					</div>
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-								Mode d'utilisation et précautions
-							</button>
-						</h2>
-						<div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-							<div class="accordion-body">
-								<strong>Conseils d'utilisation:</strong>
-								{{ product.advise }}
-
-								<br>
-								<strong>Précautions</strong>
-								{{ product.precautions }}
+								<span class="fs-5 fw-bold">{{ product.MDD | date('Y') }}</span>
 							</div>
 						</div>
 					</div>
 				</div>
 
-
+				<!-- Introduction du produit -->
+				<div class="card">
+					<div class="card-body text-center">
+						<h6 class="card-subtitle mb-2 text-muted">Introduction</h6>
+						<p class="card-text">{{ product.introduction }}</p>
+					</div>
+				</div>
 			</div>
-			<div class="col-md-4">
-				<div class="">
-					<div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-						<h3 class="text-center">{{ product.name }}</h3>
-						<div class="features mt-2 d-flex">
-							<strong>Contenance:
-							</strong>
-							{{ product.capacity }}
-							ml
-							<br>
+		</div>
 
+		<!-- Sections d'informations détaillées -->
+		<div class="accordion mt-4" id="accordionExample">
+			<div class="accordion-item">
+				<h2 class="accordion-header" id="headingOne">
+					<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						Description détaillée
+					</button>
+				</h2>
+				<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<strong>{{ product.name }}</strong>:
+						{{ product.description }}
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item">
+				<h2 class="accordion-header" id="headingTwo">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+						Indications techniques
+					</button>
+				</h2>
+				<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<strong>Nom botanique:</strong>
+						{{ product.boticalName }}<br>
+						<strong>Partie de la plante:</strong>
+						{{ product.partofplant }}<br>
+						<strong>Méthode d'extraction:</strong>
+						{{ product.extractionMethod }}<br>
+						<strong>Culture de
+							{{ product.name }}:</strong>
+						{{ product.culture }}<br>
+						<strong>Contenance:</strong>
+						{{ product.capacity }}
+						ml<br>
+						<strong>Date Maximum de Durabilité:</strong>
+						{{ product.MDD | date('Y') }}
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item">
+				<h2 class="accordion-header" id="headingThree">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+						Mode d'utilisation et précautions
+					</button>
+				</h2>
+				<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<strong>Conseils d'utilisation:</strong>
+						{{ product.advise }}<br>
+						<strong>Précautions:</strong>
+						{{ product.precautions }}
+					</div>
+				</div>
+			</div>
+		</div>
 
+		<!-- Produits similaires -->
+		<div class="mt-4">
+			<h2>Produits similaires</h2>
+			<div class="row">
+
+				{% for similarProduct in similarProducts %}
+					<div class="col-md-3 mb-4">
+						<div class="card">
+							<img src="{{ vich_uploader_asset(similarProduct.images[0], 'imageFile') }}" class="card-img-top" alt="{{ similarProduct.name }}">
+							<div class="card-body">
+								<h5 class="card-title">{{ similarProduct.name }}</h5>
+								<p class="card-text">
+									<strong>{{ similarProduct.price | amount }}</strong>
+								</p>
+								<a href="{{ path('product_show', { 'category_slug': product.category.slug, 'slug': product.slug }) }}">
+									{{ product.name }}
+								</a>
+
+							</div>
 						</div>
 					</div>
-					<form id="addToCartForm" action="{{ path('cart_add', { id: product.id }) }}" method="get">
-						<input type="hidden" name="id" value="{{ product.id }}">
-						<div class="quantity-selector d-flex align-items-center mt-3">
-							<button type="button" class="btn btn-outline-secondary" id="decrementBtn">-</button>
-							<input type="number" id="quantityInput" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control mx-2" style="width: 60px;">
-							<button type="button" class="btn btn-outline-secondary" id="incrementBtn">+</button>
-						</div>
-						<div class="mt-3">
-							{% if product.stock > 0 %}
-								<button type="submit" class="btn btn-success">Ajouter au panier</button>
-							{% else %}
-								<p class="text-danger">Temporairement en rupture de stock</p>
-							{% endif %}
-						</div>
-					</form>
-
-
-				</div>
-				<div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-
-					<p>
-						{{ product.introduction }}
-					</p>
-
-				</div>
+				{% else %}
+					<p>Aucun produit similaire trouvé.</p>
+				{% endfor %}
 			</div>
 		</div>
 	</div>
 {% endblock %}
-
 {% block javascripts %}
-	<script src=" {{ asset('assets/js/shop.js') }}" defer></script>
+	<script src="{{ asset('assets/js/shop.js') }}" defer></script>
 	<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
 {% endblock %}

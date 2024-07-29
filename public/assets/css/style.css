@@ -104,6 +104,24 @@ strong {
 }
 
 /*--------------------------------------------------------------
+# Product_show page
+--------------------------------------------------------------*/
+.quantity-selector button {
+  width: 40px; /* Ajustez la largeur des boutons si nécessaire */
+  height: 40px; /* Ajustez la hauteur des boutons si nécessaire */
+  font-size: 20px; /* Ajustez la taille de la police si nécessaire */
+}
+
+.quantity-selector input {
+  width: 60px; /* Largeur du champ de saisie */
+}
+
+.btn-success {
+  margin-top: 0; /* Évitez l'espacement vertical si nécessaire */
+  margin-left: 10px;
+}
+
+/*--------------------------------------------------------------
 # Login page
 --------------------------------------------------------------*/
 .card-fill {

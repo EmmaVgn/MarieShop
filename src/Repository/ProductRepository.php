@@ -115,6 +115,19 @@ public function findMinMaxPrice(SearchData $search): array
         return $query;
     }
 
+    public function findSimilarProducts(Product $product): array
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->where('p.category = :category')
+            ->andWhere('p.id != :id') // Exclure le produit actuel
+            ->setParameter('category', $product->getCategory())
+            ->setParameter('id', $product->getId())
+            ->setMaxResults(4); // Limiter le nombre de produits similaires
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+
 
 //    /**
 //     * @return Product[] Returns an array of Product objects
