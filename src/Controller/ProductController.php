@@ -58,11 +58,13 @@ class ProductController extends AbstractController
 
         [$minPrice, $maxPrice] = $productRepository->findMinMaxPrice($data);
         $products = $productRepository->findSearch($data);
+        $totalItems = $productRepository->countItems($data);
         return $this->render('product/display.html.twig', [
             'products' => $products,
             'form' => $form,
             'minPrice' => $minPrice,
             'maxPrice' => $maxPrice,
+            'totalItems' => $totalItems,
         ]);
     }
 }

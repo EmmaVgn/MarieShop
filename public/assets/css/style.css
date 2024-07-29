@@ -341,6 +341,12 @@ form:invalid button.btn-dark[type="submit"],
   top: 20px;
 }
 
+.js-filter-sorting {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Aligne le contenu à gauche */
+}
+
 /*--------------------------------------------------------------
 # Spinner
 --------------------------------------------------------------*/

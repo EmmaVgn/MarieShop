@@ -41,6 +41,12 @@ class Contact
     #[ORM\Column (options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $sendAt = null;
 
+    #[ORM\Column(length: 255,  nullable: true)]
+    private ?string $companyName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $companyNumber = null;
+
     public function __construct()
     {
         $this->sendAt = new \DateTimeImmutable();
@@ -73,6 +79,11 @@ class Contact
         $this->lastname = $lastname;
 
         return $this;
+    }
+
+    public function getFullName(): ?string
+    {
+        return $this->firstname . ' ' . $this->lastname;
     }
 
     public function getEmail(): ?string
@@ -119,6 +130,30 @@ class Contact
     public function setSendAt(\DateTimeImmutable $sendAt): static
     {
         $this->sendAt = $sendAt;
+
+        return $this;
+    }
+
+    public function getCompanyName(): ?string
+    {
+        return $this->companyName;
+    }
+
+    public function setCompanyName(string $companyName): static
+    {
+        $this->companyName = $companyName;
+
+        return $this;
+    }
+
+    public function getCompanyNumber(): ?string
+    {
+        return $this->companyNumber;
+    }
+
+    public function setCompanyNumber(?string $companyNumber): static
+    {
+        $this->companyNumber = $companyNumber;
 
         return $this;
     }

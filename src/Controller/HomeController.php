@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Contact;
 use App\Form\CommentFormType;
 use App\Service\SendMailService;
+use App\Form\DistributorFormType;
 use App\Repository\CommentRepository;
 use App\Repository\HeadersRepository;
 use App\Repository\ProductRepository;
@@ -49,9 +51,37 @@ class HomeController extends AbstractController
     }
 
     #[Route('/devenir-distributeur', name: 'home_distributeur')]
-    public function distributor(): Response
+    public function distributor(Request $request, EntityManagerInterface $em, SendMailService $mail): Response
     {
-        return $this->render('home/distributor.html.twig');
+        $contact = new Contact();
+        $form = $this->createForm(DistributorFormType::class, $contact);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $firstname = ucwords($form->get('firstname')->getData());
+            $lastname = mb_strtoupper($form->get('lastname')->getData());
+            $contact->setFirstname($firstname)
+                ->setLastname($lastname);
+            
+            $em->persist($contact);
+            $em->flush();
+
+            $mail->sendEmail(
+               'no-reply@monsite.net',
+                'Demande de contact',
+                'contact@sfr.fr',
+                'Demande de contact',
+                'contact',
+                ['contact' => $contact]
+            );
+
+            $this->addFlash('success', 'Votre demande de contact a été envoyée');
+            return $this->redirectToRoute('homepage');
+        }
+        return $this->render('home/distributor.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     #[Route('/liste-points-de-ventes', name: 'home_pdv')]

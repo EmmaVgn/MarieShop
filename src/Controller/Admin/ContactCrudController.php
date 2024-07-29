@@ -40,6 +40,8 @@ class ContactCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
+            TextField::new('companyname', 'Nom d\entreprise'),
+            TextField::new('companynumber', 'Numéro siret'),
             TextField::new('firstname', 'Prénom'),
             TextField::new('lastname', 'Nom'),
             EmailField::new('email', 'Email'),

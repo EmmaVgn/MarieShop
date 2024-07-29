@@ -1,6 +1,18 @@
-{{ form_start(form, {'attr': {'class': 'filter'}}) }}
-
-{{ form_row(form.q) }}
+{{ form_start(form, {'attr': {'class': 'filter js-filter-form'}}) }}
+<div class="spinner-border js-loading" role="status" aria-hidden="true" style="display: none">
+	<span class="visually-hidden">Loading...</span>
+</div>
+<div class="box border-top border-bottom ps-1">
+	<div class="box-label text-uppercase d-flex align-items-center justify-content-between">
+		Filtres
+		<button type="submit" class="btn btn-link btn-sm" id="resetBtn">Tout effacer</button>
+	</div>
+</div>
+<div class="box border-bottom ps-1">
+	<div class="box-label text-uppercase d-flex align-items-center pt-3">
+		{{ form_row(form.q) }}
+	</div>
+</div>
 <div class="box border-top border-bottom ps-1">
 	<div class="box-label text-uppercase d-flex align-items-center">
 		Catégories
@@ -38,5 +50,4 @@
 </div>
 
 
-<button class="btn btn-outline-success w-100 mt-3">Filtrer</button>
-{{ form_end(form) }}
+<button class="btn btn-outline-success w-100 mt-3">Filtrer</button></script>
