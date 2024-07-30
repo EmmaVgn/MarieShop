@@ -39,7 +39,20 @@
 						<p class="card-text mb-3">
 							<span class="fw-bold fs-3">{{ product.price | amount }}</span>
 						</p>
-						<div class="d-flex justify-content-center align-items-center mb-3">
+						<div class="d-flex justify-content-between mb-3">
+							<div class="me-2">
+								<strong>Contenance:
+								</strong>
+								<span class="fs-5 fw-bold">{{ product.capacity }}
+									ml</span>
+							</div>
+							<div>
+								<strong>Date Maximum de Durabilité:
+								</strong>
+								<span class="fs-5 fw-bold">{{ product.MDD | date('Y') }}</span>
+							</div>
+						</div>
+						<div class="d-flex justify-content-center align-items-center mb-3 mt-3">
 							<form id="addToCartForm" action="{{ path('cart_add', { id: product.id }) }}" method="get">
 								<input type="hidden" name="id" value="{{ product.id }}">
 								<div class="d-flex align-items-center me-2">
@@ -58,26 +71,15 @@
 								</div>
 							</form>
 						</div>
-						<div class="d-flex justify-content-between mb-3">
-							<div class="me-2">
-								<strong>Contenance:
-								</strong>
-								<span class="fs-5 fw-bold">{{ product.capacity }}
-									ml</span>
-							</div>
-							<div>
-								<strong>Date Maximum de Durabilité:
-								</strong>
-								<span class="fs-5 fw-bold">{{ product.MDD | date('Y') }}</span>
-							</div>
-						</div>
+
 					</div>
 				</div>
 
 				<!-- Introduction du produit -->
 				<div class="card">
 					<div class="card-body text-center">
-						<h6 class="card-subtitle mb-2 text-muted">Introduction</h6>
+						<h6 class="card-subtitle mb-2 text-muted">Description courte
+						</h6>
 						<p class="card-text">{{ product.introduction }}</p>
 					</div>
 				</div>
@@ -230,25 +232,27 @@
 								<a href="{{ path('product_show', { 'category_slug': product.category.slug, 'slug': product.slug }) }}">
 									{{ product.name }}
 								</a>
-								Voir le produit</a>
+
+							</div>
 						</div>
 					</div>
-				</div>
-			{% else %}
-				<p>Aucun produit similaire trouvé.</p>
-			{% endfor %}
+				{% else %}
+					<p>Aucun produit similaire trouvé.</p>
+				{% endfor %}
+			</div>
 		</div>
 	</div>
-</div>{% endblock %}{% block javascripts %}
-<script src="{{ asset('assets/js/shop.js') }}" defer></script>
-<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+{% block javascripts %}
+	<script src="{{ asset('assets/js/shop.js') }}" defer></script>
+	<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
 const ratingInput = document.querySelector('#ratingInput');
 const starRating = document.querySelector('.star-rating');
 
@@ -315,4 +319,5 @@ wrap: true // Permet de faire des boucles infinies
 });
 }
 });
-</script>{% endblock %}
+	</script>
+{% endblock %}

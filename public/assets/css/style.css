@@ -37,14 +37,6 @@ body {
 }
 
 /*--------------------------------------------------------------
-# Navbar
---------------------------------------------------------------*/
-
-.navbar {
-  box-shadow: 0px 0px 10px 0.1rem rgba(0, 0, 0, 0.479);
-}
-
-/*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/
 .footer a {
@@ -77,7 +69,6 @@ body {
 
 .col-form-label {
   font-weight: bold;
-  /* margin-bottom: 0.3em; */
 }
 
 strong {
@@ -129,10 +120,10 @@ strong {
   padding: 0 15px; /* Ajoute un peu d'espace de chaque côté */
 }
 
-.carousel-item {
+/* .carousel-item {
   display: flex;
   justify-content: center;
-}
+} */
 
 .card {
   width: 100%; /* Assure que la carte occupe toute la largeur du carousel */
@@ -270,11 +261,10 @@ form:invalid button.btn-dark[type="submit"],
 /*--------------------------------------------------------------
 # navbar
 --------------------------------------------------------------*/
-.navbar {
-  box-shadow: 0px 0px 0.1rem black;
-}
 
 .navbar {
+  box-shadow: 0px 0px 10px 0.1rem rgba(0, 0, 0, 0.479);
+  box-shadow: 0px 0px 0.1rem black;
   text-align: center; /* Pour centrer horizontalement */
 }
 
@@ -300,7 +290,6 @@ form:invalid button.btn-dark[type="submit"],
   background-color: #3e3e3e;
   display: flex;
   justify-content: center;
-  color: white;
 }
 
 @media only screen and (max-width: 768px) {

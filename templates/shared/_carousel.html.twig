@@ -1,3 +1,7 @@
+{% block stylesheet %}
+	<link href="{{ asset('assets/css/carousel.css') }}" rel="stylesheet">
+{% endblock %}
+
 <div id="myCarousel" class="carousel slide">
 	<div class="carousel-indicators">
 		{% for key, header in headers %}
@@ -6,13 +10,13 @@
 	</div>
 	<div class="carousel-inner">
 		{% for key, header in headers %}
-			<div class="carousel-item {{ key == 0 ? 'active' : '' }}" style="background: linear-gradient(45deg, rgba(0, 0, 0, 0.8), rgba(54, 54, 54, 0.4) 50%, rgba(28, 28, 28, 0.3)), url(images/bannieres/{{ header.image }}) center center/cover no-repeat;">
+			<div class="carousel-item {{ key == 0 ? 'active' : '' }}" style="background: linear-gradient(45deg, rgba(0, 0, 0, 0.8), rgba(54, 54, 54, 0.4) 50%, rgba(28, 28, 28, 0.3)), url('/images/bannieres/{{ header.image }}') center center/cover no-repeat;">
 				<div class="container">
 					<div class="carousel-caption text-left">
 						<h2>{{ header.title }}</h2>
 						<p>{{ header.content }}</p>
 						<p>
-							<button class="btn btn-lg btn-dark shadow" href="{{ header.btnUrl }}" onkeypress="" onkeydown="" onkeyup="">{{ header.btnTitle }}</button>
+							<a class="btn btn-lg btn-dark shadow" href="{{ header.btnUrl }}">{{ header.btnTitle }}</a>
 						</p>
 					</div>
 				</div>
@@ -28,13 +32,3 @@
 		<span class="visually-hidden">Next</span>
 	</button>
 </div>
-{% block javascripts %}
-	<script src=" {{ asset('assets/js/shop.js') }}" defer></script>
-	<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-{% endblock %}
