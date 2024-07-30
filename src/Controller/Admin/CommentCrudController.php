@@ -21,19 +21,18 @@ class CommentCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        $actions = parent::configureActions($actions);
-        $actions->remove(Crud::PAGE_INDEX, Action::NEW)
+        return $actions
+            ->remove(Crud::PAGE_INDEX, Action::NEW)
             ->remove(Crud::PAGE_INDEX, Action::EDIT);
-        return $actions;
     }
 
     public function configureFields(string $pageName): iterable
     {
-            return [
-                IdField::new('id')->onlyOnIndex(),
-                TextField::new('fullname', 'Nom complet'),
-                TextareaField::new('content', 'Description'),
-                BooleanField::new('isValid', 'A valider')->hideValueWhenTrue(),
-            ];
+        return [
+            IdField::new('id')->onlyOnIndex(),
+            TextField::new('fullname', 'Nom complet'),
+            TextareaField::new('content', 'Description'),
+            BooleanField::new('isValid', 'A valider')->hideValueWhenTrue(),
+        ];
     }
 }

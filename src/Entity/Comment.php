@@ -15,19 +15,18 @@ class Comment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])   ]
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::INTEGER)]
     #[Assert\Range(
-        min: 120,
-        max: 180,
-        notInRangeMessage: 'Na note doit être entre {{ 0 }} et {{ 5 }}',
+        min: 0,
+        max: 5,
+        notInRangeMessage: 'La note doit être entre {{ min }} et {{ max }}',
     )]
     private ?int $rating = null;
 
     #[ORM\Column(length: 255)]
-
     #[Assert\NotBlank(message: 'Le nom complet est obligatoire !')]
     private ?string $fullname = null;
 
@@ -44,12 +43,9 @@ class Comment
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Product $product = null;
 
-
-
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->isValid = false;
     }
 
     public function getId(): ?int
@@ -65,7 +61,6 @@ class Comment
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
@@ -74,10 +69,9 @@ class Comment
         return $this->rating;
     }
 
-    public function setRating(int $rating): self
+    public function setRating(int $rating): static
     {
         $this->rating = $rating;
-
         return $this;
     }
 
@@ -89,7 +83,6 @@ class Comment
     public function setFullname(string $fullname): static
     {
         $this->fullname = $fullname;
-
         return $this;
     }
 
@@ -101,7 +94,6 @@ class Comment
     public function setContent(string $content): static
     {
         $this->content = $content;
-
         return $this;
     }
 
@@ -113,7 +105,6 @@ class Comment
     public function setIsValid(bool $isValid): static
     {
         $this->isValid = $isValid;
-
         return $this;
     }
 
@@ -125,7 +116,6 @@ class Comment
     public function setUser(?User $user): static
     {
         $this->user = $user;
-
         return $this;
     }
 
@@ -137,7 +127,6 @@ class Comment
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
-
         return $this;
     }
 }
