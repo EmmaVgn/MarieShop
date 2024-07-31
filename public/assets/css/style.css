@@ -5,12 +5,18 @@
 }
 
 body {
-  font-family: "Playfair Display", "open sans", serif;
+  font-family:  "open sans", serif;
   position: relative;
   height: 100%;
   text-decoration: none;
   list-style: none;
 }
+
+h1,h2,h3,h4 {
+  font-family: "Playfair Display", serif;
+}
+
+
 
 /*--------------------------------------------------------------
 # navbar
@@ -68,10 +74,10 @@ body {
 }
 
 .navbar-custom .nav-link {
-  position: relative; /* Pour permettre l'utilisation de pseudo-éléments */
-  display: inline-block; /* Pour les effets de survol */
-  text-decoration: none !important; /* Pas de sous-lignement par défaut */
-  color: #000 !important; /* Couleur noire pour les liens */
+  position: relative; 
+  display: inline-block; 
+  text-decoration: none !important; 
+  color: #000 !important; /
 }
 
 .navbar-custom .nav-link::before {
@@ -145,9 +151,8 @@ body {
 # Customisation des boutons (bouton général)
 --------------------------------------------------------------*/
 .custom-btn {
-  background-color: #28a745;
-  border: 2px solid #28a745;
-  color: white;
+  background-color: #126d279e;
+  color: rgb(5, 1, 1);
   padding: 10px 20px;
   border-radius: 8px;
   font-size: 16px;
@@ -156,46 +161,55 @@ body {
   transition: background-color 0.3s, border-color 0.3s;
 }
 
+.custom-btn a:hover::before {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+  background: rgba(0, 0, 0, 0.097);
+}
+
 .custom-btn:hover {
-  background-color: #031206;
-  border-color: #051a0a; /* Couleur de la bordure au survol */
+  background-color: rgba(201, 224, 26, 0.407);
+  color: #000;
+  border-color: rgba(201, 224, 26, 0.407); /* Couleur de la bordure au survol */
 }
 
 /*--------------------------------------------------------------
 # Customisation des boutons (boutons des card produits)
 --------------------------------------------------------------*/
-.custom-btn-primary {
-  background-color: #007bff; /* Couleur de fond */
-  border-color: #007bff; /* Couleur de bordure */
-  color: white; /* Couleur du texte */
-  border-radius: 5px; /* Coins arrondis */
-  padding: 8px 16px; /* Espacement interne */
-  font-size: 14px; /* Taille de la police */
-  text-decoration: none; /* Supprime la décoration du texte */
-  display: inline-block; /* Affichage en ligne */
-  transition: background-color 0.3s, border-color 0.3s; /* Effet de transition */
+.custom-btn-primary {  /* Couleur d'en savoir plus'*/
+  background-color: #6F4F28; 
+  border-color: #6F4F28; 
+  color: white; 
+  border-radius: 5px; 
+  padding: 8px 16px; 
+  font-size: 14px; 
+  text-decoration: none; 
+  display: inline-block; 
+  transition: background-color 0.3s, border-color 0.3s; 
 }
 
 .custom-btn-primary:hover {
-  background-color: #0056b3; /* Couleur de fond au survol */
-  border-color: #0056b3; /* Couleur de bordure au survol */
+  background-color: rgba(201, 224, 26, 0.407);
+  border-color: rgba(201, 224, 26, 0.407);
+  color: #0d161b;
 }
 
-.custom-btn-success {
-  background-color: #0d461a; /* Couleur de fond */
-  border-color: #28a745; /* Couleur de bordure */
-  color: white; /* Couleur du texte */
-  border-radius: 5px; /* Coins arrondis */
-  padding: 8px 16px; /* Espacement interne */
-  font-size: 14px; /* Taille de la police */
-  text-decoration: none; /* Supprime la décoration du texte */
-  display: inline-block; /* Affichage en ligne */
-  transition: background-color 0.3s, border-color 0.3s; /* Effet de transition */
+.custom-btn-success { /* Couleur d'ajouter au panier */
+  background-color: #2C6B4F; 
+  border-color: #2C6B4F; 
+  color: white; 
+  border-radius: 5px; 
+  padding: 8px 16px; 
+  font-size: 14px; 
+  text-decoration: none; 
+  display: inline-block; 
+  transition: background-color 0.3s, border-color 0.3s; 
 }
 
 .custom-btn-success:hover {
-  background-color: #eed114; /* Couleur de fond au survol */
-  border-color: #218838; /* Couleur de bordure au survol */
+  background-color: rgba(201, 224, 26, 0.407);
+  border-color: rgba(201, 224, 26, 0.407);
+  color: #0d161b;
 }
 
 /*--------------------------------------------------------------
