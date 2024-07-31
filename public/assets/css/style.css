@@ -16,6 +16,60 @@ h1,h2,h3,h4 {
   font-family: "Playfair Display", serif;
 }
 
+/* Style général des checkboxes */
+input[type="checkbox"] {
+  -webkit-appearance: none; /* Supprime le style par défaut sur Webkit */
+  -moz-appearance: none; /* Supprime le style par défaut sur Firefox */
+  appearance: none; /* Supprime le style par défaut */
+  width: 20px;
+  height: 20px;
+  border: 2px solid #4CAF50; /* Bordure verte */
+  border-radius: 4px;
+  background-color: #fff; /* Fond blanc */
+  cursor: pointer;
+  position: relative;
+}
+
+/* Réinitialiser les styles par défaut des cases à cocher */
+input[type="checkbox"] {
+  -webkit-appearance: none; /* Supprime le style par défaut sur Webkit (Chrome, Safari) */
+  -moz-appearance: none;    /* Supprime le style par défaut sur Firefox */
+  appearance: none;         /* Supprime le style par défaut */
+  width: 20px;
+  height: 20px;
+  border: 2px solid #4CAF50; /* Bordure verte personnalisée */
+  border-radius: 4px;
+  background-color: #fff; /* Fond blanc */
+  cursor: pointer;
+  position: relative;
+  outline: none;            /* Supprime l'effet de contour au focus */
+}
+
+/* Style lorsque la checkbox est cochée */
+input[type="checkbox"]:checked::before {
+  content: '';
+  display: block;
+  width: 14px;
+  height: 14px;
+  background-color: #4CAF50; /* Couleur de fond verte */
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  border-radius: 2px;
+}
+
+/* Style au survol de la checkbox */
+input[type="checkbox"]:hover {
+  border-color: #388E3C; /* Couleur de bordure au survol */
+}
+
+/* Style lorsque la checkbox est focalisée */
+input[type="checkbox"]:focus {
+  outline: none; /* Supprime le contour par défaut du focus */
+}
+
+
+
 
 
 /*--------------------------------------------------------------
@@ -217,51 +271,44 @@ h1,h2,h3,h4 {
 --------------------------------------------------------------*/
 .text-custom {
   color: #333;
+  text-align: center;
 }
 
-/* Style général pour les boutons avec texte jaune */
-.btn {
-  color: #ffd700; /* Couleur du texte en jaune */
-  border-color: transparent; /* Bordure transparente pour les boutons */
-  background-color: transparent; /* Fond transparent pour les boutons */
-  border-radius: 0.25rem; /* Coins arrondis */
-  padding: 0.5rem 1rem; /* Espacement interne */
-  text-align: center; /* Alignement du texte */
-}
+
 
 /* Style spécifique pour le bouton "Tout effacer" */
 .btn-reset {
-  background-color: transparent; /* Fond transparent pour le bouton "Tout effacer" */
-  border: 1px solid #ffd700; /* Bordure jaune */
-  color: #ffd700; /* Couleur du texte jaune */
+  background-color: transparent; 
+  border: 1px solid #ffd700;
+  color: #ffd700;
 }
 
 .btn-reset:hover {
-  background-color: #ffd700; /* Fond jaune au survol */
-  color: #000; /* Couleur du texte noire au survol */
+  background-color: #ffd700; 
+  color: #000; 
 }
 
 /* Style spécifique pour le bouton "+" */
 .btn-categories {
-  color: #ffd700; /* Couleur du texte jaune */
-  border: 1px solid #ffd700; /* Bordure jaune */
+  color: #ffd700; 
+  border: 1px solid #ffd700; 
 }
 
 .btn-categories:hover {
-  background-color: #ffd700; /* Fond jaune au survol */
-  color: #000; /* Couleur du texte noire au survol */
+  background-color: #ffd700; 
+  color: #000; 
 }
 
 /* Style spécifique pour le bouton "Filtrer" */
 .btn-filter {
-  background-color: #ffd700; /* Fond jaune */
-  color: #000; /* Couleur du texte noire */
-  border: 1px solid #ffd700; /* Bordure jaune */
+  background-color: rgba(201, 224, 26, 0.407); 
+  color: #000; 
+  border: 1px solid rgba(201, 224, 26, 0.407);
 }
 
 .btn-filter:hover {
-  background-color: #ffc107; /* Fond jaune clair au survol */
-  border-color: #ffc107; /* Bordure jaune clair */
+  background-color: rgba(201, 224, 26, 0.407);
+  border-color: rgba(201, 224, 26, 0.407);
 }
 
 /*--------------------------------------------------------------
@@ -277,12 +324,12 @@ h1,h2,h3,h4 {
 
 .pagination .page-item.active .page-link {
   background-color: rgba(0, 0, 0, 0.1);
-  border-color: #bd2a2a;
-  color: rgb(200, 155, 51);
+  border-color: #0d1a27;
+  color:#2C6B4F;
 }
 
 .pagination .page-item.disabled .page-link {
-  color: #65014b;
+  color: #0d1a27;
   cursor: not-allowed;
 }
 
@@ -300,14 +347,14 @@ h1,h2,h3,h4 {
 
 /* Style pour le bouton de tri actif */
 .btn.active {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
+  background-color: #55ff00;
+  color: rgb(12, 9, 9);
+  border-color: #0d1a27;
 }
 
 /* Style pour le bouton de tri non trié */
 .btn:not(.active) {
-  color: #007bff;
+  color: #0d161b;
 }
 
 /* Style pour les icônes de tri */
