@@ -20,9 +20,9 @@
 			{{ p.Description|raw|nl2br|striptags|u.truncate(150, '...') }}
 		</p>
 		<hr>
-		<a href="{{ path('product_show', {'category_slug': p.category.slug, 'slug': p.slug}) }}" class="btn btn-primary btn-sm">En savoir plus</a>
+		<a href="{{ path('product_show', {'category_slug': p.category.slug, 'slug': p.slug}) }}" class="custom-btn-primary btn-sm">En savoir plus</a>
 		{% if p.stock > 0 %}
-			<a href="{{ path('cart_add', {'id': p.id}) }}" class="btn btn-success btn-sm">Ajouter</a>
+			<a href="{{ path('cart_add', {'id': p.id}) }}" class="custom-btn-success btn-sm">Ajouter</a>
 		{% else %}
 			<p class="text-danger">Temporairement en rupture de stock</p>
 		{% endif %}

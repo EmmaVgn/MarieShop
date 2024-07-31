@@ -1,2 +1,6 @@
-{{ knp_pagination_sortable(products, 'Prix', 'p.price') }}
-{{ knp_pagination_sortable(products, 'Nom', 'p.name') }}
+{{ knp_pagination_sortable(products, 'Prix', 'p.price', {
+    'template': 'pagination/sortable.html.twig'
+}) }}
+{{ knp_pagination_sortable(products, 'Nom', 'p.name', {
+    'template': 'pagination/sortable.html.twig'
+}) }}

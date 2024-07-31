@@ -24,18 +24,16 @@
 										</div>
 										<div class="blog-info">
 											<h5>{{ advise.name }}</h5>
-											{{ advise.subtitle }}
+											<p>{{ advise.subtitle }}</p>
 											<div class="btn-bar">
-												<a href="{{ path('advise_show', {'slug': advise.slug}) }}" class="px-btn-arrow">
-													<span>Lire plus</span>
-													<i class="arrow"></i>
+												<a href="{{ path('advise_show', {'slug': advise.slug}) }}" class="btn btn-primary btn-read-more">
+													Lire plus
 												</a>
 											</div>
 										</div>
 									</div>
 								</div>
 							{% endfor %}
-
 						</div>
 					</div>
 				</div>

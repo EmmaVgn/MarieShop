@@ -17,24 +17,23 @@
 						<h2>{{ header.title }}</h2>
 						<p>{{ header.content }}</p>
 						<p>
-							<a class="btn btn-lg btn-dark shadow" href="{{ header.btnUrl }}">{{ header.btnTitle }}</a>
+							<a class="custom-btn" href="{{ header.btnUrl }}">{{ header.btnTitle }}</a>
 						</p>
 					</div>
 				</div>
 			</div>
 		{% endfor %}
 	</div>
-	<button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+	<button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
 		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
 		<span class="visually-hidden">Previous</span>
 	</button>
-	<button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+	<button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
 		<span class="carousel-control-next-icon" aria-hidden="true"></span>
 		<span class="visually-hidden">Next</span>
 	</button>
 </div>
-{% block javascripts %}
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
+{% block javascripts %}
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 {% endblock %}

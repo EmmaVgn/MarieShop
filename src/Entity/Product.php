@@ -108,7 +108,7 @@ class Product
 
     public function setDescription(string $description): static
     {
-        $this->description = $description;
+        $this->description = strip_tags($description);
         return $this;
     }
 
@@ -298,7 +298,7 @@ class Product
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
-            $comment->setProducts($this);
+            $comment->setProduct($this);
         }
 
         return $this;
@@ -308,8 +308,8 @@ class Product
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getProducts() === $this) {
-                $comment->setProducts(null);
+            if ($comment->getProduct() === $this) {
+                $comment->setProduct(null);
             }
         }
 
